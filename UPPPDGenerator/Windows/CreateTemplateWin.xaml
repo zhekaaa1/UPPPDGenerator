@@ -1,0 +1,321 @@
+﻿<Window x:Class="UPPPDGenerator.Windows.CreateTemplateWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UPPPDGenerator.Windows"
+        mc:Ignorable="d"
+        Title="CreateTemplateWin" Height="1080" Width="1920" WindowState="Maximized">
+    
+
+    <Grid>
+
+        <Grid Background="#222222">
+            <Grid VerticalAlignment="Top" Background="#343434" Height="50">
+                <Image Source="{StaticResource icon}" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <TextBlock Text="Шаблон1" FontSize="25" VerticalAlignment="Center" Margin="100,0,0,0" Foreground="White"/>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Height" Value="35"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="50"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="RU" Margin="0,0,20,0" Background="#B2009A" Tag="ru-RU" />
+                    <Button Content="EN" Background="Transparent" BorderBrush="#B2009A" Tag="en-US"/>
+                </StackPanel>
+            </Grid>
+
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <!-- ПАНЕЛЬ ЭЛЕМЕНТОВ -->
+                <Grid Margin="20,70,20,20" VerticalAlignment="Top" Grid.Column="0">
+                    <Border DockPanel.Dock="Top" Margin="0,0,0,5" CornerRadius="10,10,0,0" Background="#343434">
+                        <Grid>
+                            <TextBlock Text="Элементы" Padding="10" Foreground="White" FontSize="18"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Grid Margin="20,120,20,20" Grid.Column="0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Bottom">
+                            <StackPanel>
+                                <Button Content="Назад" Foreground="White" Background="Transparent" Margin="10" Padding="5" BorderBrush="#B2009A" FontSize="16"/>
+                                <Button Content="Дальше" Background="#B2009A" BorderBrush="Transparent" Margin="10" Padding="5" Foreground="White" FontSize="16"/>
+                            </StackPanel>
+                        </Border>
+                        <Border CornerRadius="0,0,10,10" Background="#343434" DockPanel.Dock="Bottom">
+                            <Grid>
+                                <StackPanel Orientation="Vertical" Margin="10">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TreeViewItem">
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="FontSize" Value="16"/>
+                                            <Setter Property="Margin" Value="0,10,0,0"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+
+
+                                    <TreeView x:Name="ElementTreeView" BorderThickness="0" Background="Transparent" Margin="0,10,0,0">
+                                        <TreeViewItem Tag="n1" IsExpanded="True" Header="Абзацы" FontWeight="Bold" Foreground="White" >
+                                            <TreeViewItem Tag="defaultpara">
+                                                <TreeViewItem.Header>
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <Border BorderThickness="1" BorderBrush="White">
+                                                            <TextBlock Text="Аа" FontSize="12" Foreground="White"/>
+                                                        </Border>
+                                                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычный абзац" FontSize="14" Foreground="White"/>
+                                                    </StackPanel>
+                                                </TreeViewItem.Header>
+                                            </TreeViewItem>
+
+
+                                            <TreeViewItem Tag="n2" Header="Поля ручного ввода" FontWeight="Bold">
+                                                <TreeViewItem Tag="defaultfield">
+                                                    <TreeViewItem.Header>
+                                                        <StackPanel Orientation="Horizontal" Margin="5">
+                                                            <Border BorderThickness="1" BorderBrush="White">
+                                                                <TextBlock Text="А_" FontSize="12" Foreground="White"/>
+                                                            </Border>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычное поле ручного ввода" FontSize="14" Foreground="White"/>
+                                                        </StackPanel>
+                                                    </TreeViewItem.Header>
+                                                </TreeViewItem>
+                                                <TreeViewItem Tag="datafield">
+                                                    <TreeViewItem.Header>
+                                                        <StackPanel Orientation="Horizontal" Margin="5">
+                                                            <Border BorderThickness="1" BorderBrush="White">
+                                                                <TextBlock Text="12_" FontSize="12" Foreground="White"/>
+                                                            </Border>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Поле ручного ввода даты" FontSize="14" Foreground="White"/>
+                                                        </StackPanel>
+                                                    </TreeViewItem.Header>
+                                                </TreeViewItem>
+
+                                                <TreeViewItem Tag="signfield">
+                                                    <TreeViewItem.Header>
+                                                        <StackPanel Orientation="Horizontal" Margin="5">
+                                                            <Border BorderThickness="1" BorderBrush="White">
+                                                                <TextBlock Text="α_" FontSize="12" Foreground="White"/>
+                                                            </Border>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Поле для подписи" FontSize="14" Foreground="White"/>
+                                                        </StackPanel>
+                                                    </TreeViewItem.Header>
+                                                </TreeViewItem>
+                                            </TreeViewItem>
+
+
+
+
+                                        </TreeViewItem>
+                                        <TreeViewItem Tag="n3" IsExpanded="True" Header="Графические" FontWeight="Bold">
+                                            <TreeViewItem Tag="table">
+                                                <TreeViewItem.Header>
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <Border BorderThickness="1" BorderBrush="White">
+                                                            <TextBlock Text="|--" FontSize="12" Foreground="White"/>
+                                                        </Border>
+                                                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Таблица" FontSize="14" Foreground="White"/>
+                                                    </StackPanel>
+                                                </TreeViewItem.Header>
+                                            </TreeViewItem>
+                                            <TreeViewItem Tag="image">
+                                                <TreeViewItem.Header>
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <Border BorderThickness="1" BorderBrush="White">
+                                                            <TextBlock Text="|:::|" FontSize="12" Foreground="White"/>
+                                                        </Border>
+                                                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Изображение" FontSize="14" Foreground="White"/>
+                                                    </StackPanel>
+                                                </TreeViewItem.Header>
+                                            </TreeViewItem>
+                                        </TreeViewItem>
+
+                                    </TreeView>
+
+
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        
+                    </DockPanel>
+                    
+                </Grid>
+
+
+                <!-- ЧЕРНОВИК -->
+
+                <Canvas Name="DropCanvas" AllowDrop="True" Grid.Column="1" DragOver="Canvas_DragOver" Background="White" Drop="Canvas_Drop" Margin="20,70,20,20">
+                    <StackPanel x:Name="ElementsContainer" Orientation="Vertical" Width="Auto"/>
+                </Canvas>
+
+                <!-- ПАНЕЛЬ СВОЙСТВ ДЛЯ АБЗАЦЕВ -->
+                <DockPanel x:Name="PropertyPanel_Paragraphs" Visibility="Visible" Opacity="1" Grid.Column="2" Margin="20,70,20,20">
+                    <Border DockPanel.Dock="Top" Margin="0,0,0,5" CornerRadius="10,10,0,0" Background="#343434">
+                        <Grid>
+                            <TextBlock Text="Свойства" Padding="10" Foreground="White" FontSize="18"/>
+                        </Grid>
+                    </Border>
+                    <Border CornerRadius="0,0,10,10" Background="#343434">
+                        <Grid>
+                            <StackPanel Margin="10">
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="Background" Value="#595959"/>
+                                        <Setter Property="BorderBrush" Value="#303030"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                    </Style>
+                                    <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <Setter Property="Background" Value="#595959" />
+                                        <Setter Property="BorderBrush" Value="#303030" />
+                                        <Setter Property="Padding" Value="5"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ComboBox">
+                                                    <Grid>
+                                                        <ToggleButton x:Name="ToggleButton"
+                                  Grid.Column="2"
+                                  Focusable="false"
+                                  IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                  ClickMode="Press">
+                                                            <ToggleButton.Template>
+                                                                <ControlTemplate>
+                                                                    <Grid>
+                                                                        <Border x:Name="ToggleBorder" 
+                                            Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1"/>
+                                                                        <Path x:Name="Arrow"
+                                          HorizontalAlignment="Right"
+                                          Margin="0,0,4,0"
+                                          Data="M 0 0 L 4 4 L 8 0 Z"
+                                          Fill="White"/>
+                                                                    </Grid>
+                                                                </ControlTemplate>
+                                                            </ToggleButton.Template>
+                                                        </ToggleButton>
+
+                                                        <!-- Оборачиваем ContentPresenter в Border для поддержки Background и Foreground -->
+                                                        <Border x:Name="ContentBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            Margin="3,3,23,3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left">
+                                                            <ContentPresenter x:Name="ContentSite"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left"/>
+                                                        </Border>
+
+                                                        <Popup x:Name="Popup" Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           PopupAnimation="Slide">
+                                                            <Grid x:Name="DropDown"
+                              SnapsToDevicePixels="True"
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              Background="{TemplateBinding Background}">
+                                                                <Border x:Name="DropDownBorder"
+                                    BorderThickness="1"
+                                    BorderBrush="{TemplateBinding BorderBrush}"/>
+                                                                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                                                </ScrollViewer>
+                                                            </Grid>
+                                                        </Popup>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsEnabled" Value="False">
+                                                            <Setter TargetName="ContentBorder" Property="Background" Value="Gray"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </StackPanel.Resources>
+                                
+                                
+                                
+                                <!-- Заголовок панели -->
+                                <TextBlock HorizontalAlignment="Left"
+                                    Text="Абзац" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,10" />
+                                
+                                <!-- свойства -->
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <StackPanel>
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Название" Foreground="White"/>
+                                        <TextBox Margin="5" TextChanged="TitleTextBox_TextChanged" x:Name="TitleTextBox"/>
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Размер шрифта (в пт)" Foreground="White"/>
+                                        <TextBox Margin="5" TextChanged="FontSizeTextBox_TextChanged" x:Name="FontSizeTextBox"/>
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Выравнивание (в пределах страницы)" Foreground="White" VerticalAlignment="Center"/>
+                                        <ComboBox Style="{StaticResource CustomComboBoxStyle}" Margin="5"
+                                                    x:Name="AlignmentComboBox" VerticalAlignment="Center" SelectionChanged="AlignmentComboBox_SelectionChanged">
+                                            <ComboBoxItem Content="По левому краю"/>
+                                            <ComboBoxItem Content="По правому краю"/>
+                                            <ComboBoxItem Content="По центру"/>
+                                            <ComboBoxItem Content="По ширине"/>
+                                        </ComboBox>
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ слева (в см)" Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="MarginLeftTextBox" TextChanged="MarginLeftTextBox_TextChanged" Margin="5"/>
+
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ справа (в см)" Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="MarginRightTextBox" TextChanged="MarginRightTextBox_TextChanged"  Margin="5"/>
+
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ сверху (в см)" Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="MarginTopTextBox" TextChanged="MarginTopTextBox_TextChanged"  Margin="5"/>
+
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ снизу (в см)" Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="MarginBottomTextBox" TextChanged="MarginBottomTextBox_TextChanged"  Margin="5"/>
+
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ первой строки (в см)" Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="FirstLineIndentationTextBox" TextChanged="FirstLineIndentationTextBox_TextChanged"  Margin="5"/>
+
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Межстрочный интервал" Foreground="White" VerticalAlignment="Center"/>
+                                        <ComboBox Style="{StaticResource CustomComboBoxStyle}" x:Name="LineSpacingComboBox" SelectionChanged="LineSpacingComboBox_SelectionChanged"  Margin="5">
+                                            <ComboBoxItem Content="Одинарный" Tag="1"/>
+                                            <ComboBoxItem Content="Полуторный" Tag="1.5"/>
+                                            <ComboBoxItem Content="Двойной" Tag="2"/>
+                                            <ComboBoxItem Content="Множитель" Tag="multiply"/>
+                                        </ComboBox>
+
+                                        <TextBlock x:Name="LineSpacingMultiplierLabel" HorizontalAlignment="Left" Margin="5" Text="Множитель (в pt)" Foreground="White" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                        <TextBox x:Name="LineSpacingMultiplierTextBox" TextChanged="LineSpacingMultiplierTextBox_TextChanged"  Margin="5" Visibility="Collapsed"/>
+
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </StackPanel>
+                            
+                        </Grid>
+                    </Border>
+                </DockPanel>
+
+                
+                <!-- ДЛЯ других элементов. -->
+                <Grid Grid.Column="2" Margin="20,70,20,20" Visibility="Collapsed">
+                    
+                </Grid>
+                
+                
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

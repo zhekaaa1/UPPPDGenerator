@@ -1,0 +1,363 @@
+﻿<Window x:Class="UPPPDGenerator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UPPPDGenerator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="1280" Background="#222222">
+    <Window.Resources>
+
+        
+
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                     From="0" To="1"
+                     Duration="0:0:0.5"
+                     BeginTime="0:0:0.5" />
+        </Storyboard>
+        <Storyboard x:Key="FadeOutAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                     To="0"
+                     Duration="0:0:0.5"
+                     BeginTime="0:0:0.5" />
+        </Storyboard>
+
+        
+
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid VerticalAlignment="Top" Background="#343434" Height="50">
+                <Image Source="{StaticResource icon}" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Height" Value="35"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="50"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="RU" Margin="0,0,20,0" Background="#B2009A" Tag="ru-RU" Click="Button_Click"/>
+                    <Button Content="EN" Background="Transparent" BorderBrush="#B2009A" Tag="en-US" Click="Button_Click"/>
+                </StackPanel>
+            </Grid>
+            
+            
+            <!-- ГЛАВНЫЙ ЭКРАН -->
+            <Grid x:Name="maingrid" Visibility="Visible">
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock HorizontalAlignment="Center" Text="UPPPD GENERATOR" FontFamily="{StaticResource Lexend}" FontSize="48" Margin="0."/>
+                    <TextBlock Text="{DynamicResource mw/greeting}" FontFamily="{StaticResource Comfortaa}" FontSize="32" Margin="0,70,0,0"/>
+                    <TextBlock Text="{DynamicResource mw/whatis}" FontFamily="{StaticResource Comfortaa}" FontSize="16" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWithOverflow" Margin="0,20,0,0" Width="800"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Height" Value="50"/>
+                                <Setter Property="FontSize" Value="18"/>
+                                <Setter Property="Width" Value="250"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Content="{DynamicResource mw/login}" Margin="0,0,20,0" Background="#B2009A" Click="Button_Click_1"  Tag="tologin"/>
+                        <Button Content="{DynamicResource mw/reg}" Background="Transparent" BorderBrush="#B2009A" Tag="toreg" Click="Button_Click_1"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            
+            <!-- АВТОРИЗАЦИЯ -->
+            <Grid x:Name="authgrid" Visibility="Collapsed">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Background" Value="#343434"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                        </Style>
+                        <Style TargetType="PasswordBox">
+                            <Setter Property="Background" Value="#343434"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    
+                    
+                    <TextBlock HorizontalAlignment="Center" Text="UPPPD GENERATOR" FontFamily="{StaticResource Lexend}" FontSize="32" Margin="0"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Left" Text="{DynamicResource mw/back}" Tag="back1" VerticalAlignment="Bottom" TextDecorations="Underline" Foreground="#B2009A" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                        <TextBlock Grid.Column="1" Text="{DynamicResource mw/greeting}" FontSize="20" Margin="0,30,0,30"/>
+                    </Grid>
+                    
+                    
+                    <TextBlock Text="{DynamicResource mw/email}" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="email" Text="1"/>
+                    <TextBlock Text="{DynamicResource errs/reqfield}" Opacity="0"  x:Name="err1" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="{DynamicResource mw/pass}" HorizontalAlignment="Left"/>
+                    <StackPanel x:Name="hidden" Orientation="Horizontal" Visibility="Visible">
+                        <PasswordBox x:Name="passwordhidden" Width="470" HorizontalAlignment="Left" Password="1"/>
+                        <Image Source="/resources/imgs/eye-fill.png" Width="20" Margin="10,0,0,0" MouseLeftButtonDown="TogglePasswordVisibility"/>
+                    </StackPanel>
+                    <StackPanel x:Name="shown" Orientation="Horizontal" Visibility="Collapsed">
+                        <TextBox x:Name="passwordshown" Width="470" HorizontalAlignment="Left"/>
+                        <Image Source="/resources/imgs/eye-slash-fill.png" Width="20" Margin="10,0,0,0" MouseLeftButtonDown="TogglePasswordVisibility"/>
+                    </StackPanel>
+                    <TextBlock Text="{DynamicResource errs/reqfield}" Opacity="0" x:Name="err2" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+                    
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Height" Value="50"/>
+                                <Setter Property="FontSize" Value="18"/>
+                                <Setter Property="Width" Value="200"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Content="{DynamicResource mw/reg/nhaveacc}" Background="Transparent" Margin="0,0,20,0" BorderBrush="#B2009A" Click="Button_Click_1" Tag="nhaveacc"/>
+                        <Button Content="{DynamicResource mw/login}" Background="#B2009A" Click="Button_Click_2"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <!-- РЕГИСТРАЦИЯ -->
+            <Grid x:Name="reggrid" Visibility="Collapsed">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Background" Value="#343434"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                        </Style>
+                        <Style TargetType="PasswordBox">
+                            <Setter Property="Background" Value="#343434"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock HorizontalAlignment="Center" Text="UPPPD GENERATOR" FontFamily="{StaticResource Lexend}" FontSize="32" Margin="0"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Left" Text="{DynamicResource mw/back}" Tag="back2" VerticalAlignment="Bottom" TextDecorations="Underline" Foreground="#B2009A" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                        <TextBlock Grid.Column="1" Text="{DynamicResource mw/greeting}" FontSize="20" Margin="0,30,0,30"/>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,30,0">
+                            <TextBlock Text="{DynamicResource mw/reg/f}" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="rf"/>
+                            <TextBlock Text="{DynamicResource errs/reqfield}" x:Name="er1" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+                            
+                            <TextBlock Text="{DynamicResource mw/reg/i}" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="ri"/>
+                            <TextBlock Text="{DynamicResource errs/reqfield}" x:Name="er2" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+                            
+                            <TextBlock Text="{DynamicResource mw/reg/o}" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="ro"/>
+                            <TextBlock Text="{DynamicResource errs/reqfield}" x:Name="er3" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+                            
+                            
+                        </StackPanel>
+                        
+                        
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{DynamicResource mw/email}" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="remail"/>
+                            <TextBlock Text="{DynamicResource errs/wrongemail}" x:Name="er4" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+
+                            <TextBlock Text="{DynamicResource mw/pass}" HorizontalAlignment="Left"/>
+                            <StackPanel x:Name="rhidden" Orientation="Horizontal" Visibility="Visible">
+                                <PasswordBox x:Name="rpasswordhidden" Width="470" HorizontalAlignment="Left"/>
+                                <Image Source="/resources/imgs/eye-fill.png" Width="20" Margin="10,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel x:Name="rshown" Orientation="Horizontal" Visibility="Collapsed">
+                                <TextBox x:Name="rpasswordshown" Width="470" HorizontalAlignment="Left"/>
+                                <Image Source="/resources/imgs/eye-slash-fill.png" Width="20" Margin="10,0,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontSize" Value="12"/>
+                                        <Setter Property="Margin" Value="10,0,0,0"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Margin" Value="0,2,0,2"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                
+                                <StackPanel Orientation="Horizontal">                                    
+                                    <Image Source="{StaticResource true}" Width="15" Height="15" />
+                                    <TextBlock Text="{DynamicResource mw/reg/pass/containssmallletter}" FontFamily="{StaticResource Comfortaa}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">                                    
+                                    <Image Source="{StaticResource false}" Width="15" Height="15" />
+                                    <TextBlock Text="{DynamicResource mw/reg/pass/containslargeletter}" FontFamily="{StaticResource Comfortaa}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">                                    
+                                    <Image Source="{StaticResource true}" Width="15" Height="15" />
+                                    <TextBlock Text="{DynamicResource mw/reg/pass/containsspecsymbol}" FontFamily="{StaticResource Comfortaa}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">                                    
+                                    <Image Source="{StaticResource false}" Width="15" Height="15" />
+                                    <TextBlock Text="{DynamicResource mw/reg/pass/containsdigit}" FontFamily="{StaticResource Comfortaa}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">                                    
+                                    <Image Source="{StaticResource true}" Width="15" Height="15" />
+                                    <TextBlock Text="{DynamicResource mw/reg/pass/containseightcharacters}" FontFamily="{StaticResource Comfortaa}"/>
+                                </StackPanel>
+                                
+                                
+                            </StackPanel>
+
+
+
+                            <TextBlock Text="{DynamicResource mw/reg/rpass}" HorizontalAlignment="Left"/>
+                            <StackPanel x:Name="rrhidden" Orientation="Horizontal" Visibility="Visible">
+                                <PasswordBox x:Name="rrpasswordhidden" Width="470" HorizontalAlignment="Left"/>
+                                <Image Source="/resources/imgs/eye-fill.png" Width="20" Margin="10,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel x:Name="rrshown" Orientation="Horizontal" Visibility="Collapsed">
+                                <TextBox x:Name="rrpasswordshown" Width="470" HorizontalAlignment="Left"/>
+                                <Image Source="/resources/imgs/eye-slash-fill.png" Width="20" Margin="10,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{DynamicResource errs/rpass}" x:Name="er6" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+                            
+                            
+                            
+                        </StackPanel>
+                        
+                    </StackPanel>
+                    
+
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Height" Value="50"/>
+                                <Setter Property="FontSize" Value="18"/>
+                                <Setter Property="Width" Value="250"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Content="{DynamicResource mw/reg/haveacc}" Margin="0,0,20,0" Background="Transparent" BorderBrush="#B2009A" Tag="haveacc" Click="Button_Click_1"/>
+                        <Button Content="{DynamicResource mw/reg}" Background="#B2009A" Tag="toconf" Click="Button_Click_1"/>
+                    </StackPanel>
+                    
+                </StackPanel>
+            </Grid>
+            
+            
+            
+            
+            <!-- Подтверждение регистрации -->
+            <Grid x:Name="confgrid" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                            <Setter Property="Background" Value="#343434"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Margin" Value="0,10,0,10"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <TextBlock HorizontalAlignment="Center" Text="UPPPD GENERATOR" FontFamily="{StaticResource Lexend}" FontSize="32" Margin="0"/>
+
+                    
+                    <TextBlock Width="700" Grid.Column="1" Text="{DynamicResource mw/confirm/whathappens}" TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Margin="0,30,0,30"/>
+                    <TextBlock Text="{DynamicResource mw/confirm/hint}" Opacity="0.5"/>
+
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{DynamicResource mw/confirm/code}" HorizontalAlignment="Left"/>
+
+                        <TextBox/>
+                        <TextBlock Text="{DynamicResource errs/confirm/wrongcode}" x:Name="errr1" FontSize="12" Foreground="Red" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Height" Value="50"/>
+                                <Setter Property="FontSize" Value="18"/>
+                                <Setter Property="Width" Value="250"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Content="{DynamicResource mw/confirm/cancel}" Background="Transparent" Margin="0,0,20,0" BorderBrush="#B2009A" Tag="back3" Click="Button_Click_1"/>
+                        <Button Content="{DynamicResource mw/confirm/ok}"  Background="#B2009A"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,28 @@
+﻿<Application x:Class="UPPPDGenerator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:UPPPDGenerator"
+             StartupUri="Windows/MainWin.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Strings.ru-RU.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!-- оставить. -->
+            <FontFamily x:Key="Lexend">pack://application:,,,/resources/fonts/LexendZetta-VariableFont_wght.ttf#Lexend Zetta</FontFamily>
+            <FontFamily x:Key="InterF">pack://application:,,,/resources/fonts/Inter-VariableFont_opsz_wght.ttf#Inter</FontFamily>
+            <FontFamily x:Key="Comfortaa">pack://application:,,,/resources/fonts/Comfortaa-VariableFont_wght.ttf#Comfortaa</FontFamily>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+            </Style>
+
+            <BitmapImage x:Key="icon">resources/imgs/icon.png</BitmapImage>
+            <BitmapImage x:Key="true">resources/imgs/check-circle.png</BitmapImage>
+            <BitmapImage x:Key="false">resources/imgs/dash-circle-fill.png</BitmapImage>
+            
+        </ResourceDictionary>
+        
+        
+    </Application.Resources>
+</Application>

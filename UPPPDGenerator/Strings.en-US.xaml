@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="mw/greeting">Welcome!</sys:String>
+    <sys:String x:Key="mw/whatis">UPPPD Generator is a program for automated report generation. Create document templates and don't waste time completing them!</sys:String>
+    <sys:String x:Key="mw/login">Sign in</sys:String>
+    <sys:String x:Key="mw/reg">Sign up</sys:String>
+    <sys:String x:Key="mw/back">Back</sys:String>
+    
+    <sys:String x:Key="errs/reqfield">* Required field</sys:String>
+    <sys:String x:Key="errs/wrongemail">* Check the email address</sys:String>
+    <sys:String x:Key="errs/rpass">* Passwords are not same</sys:String>
+    <sys:String x:Key="errs/confirm/wrongcode">* Wrong code</sys:String>
+    <sys:String x:Key="errs/auth/wrongauthdata">* Wrong email address or password!</sys:String>
+    
+    <sys:String x:Key="mw/email">Email address:</sys:String>
+    <sys:String x:Key="mw/pass">Password:</sys:String>
+
+    <sys:String x:Key="mw/reg/haveacc">Already have an account?</sys:String>
+    <sys:String x:Key="mw/reg/nhaveacc">No account?</sys:String>
+    <sys:String x:Key="mw/reg/f">Last name:</sys:String>
+    <sys:String x:Key="mw/reg/i">First name:</sys:String>
+    <sys:String x:Key="mw/reg/o">Middle name (if any):</sys:String>
+    <sys:String x:Key="mw/reg/rpass">Repeat password:</sys:String>
+    <sys:String x:Key="mw/reg/pass/containssmallletter">Contains a lowercase letter</sys:String>
+    <sys:String x:Key="mw/reg/pass/containslargeletter">Contains an uppercase letter</sys:String>
+    <sys:String x:Key="mw/reg/pass/containsspecsymbol">Contains a special character: !, №, #, $, % etc.</sys:String>
+    <sys:String x:Key="mw/reg/pass/containsdigit">Contains a digit: 0, 1, ... , 8, 9</sys:String>
+    <sys:String x:Key="mw/reg/pass/containseightcharacters">Contains at least 8 characters</sys:String>
+
+
+
+    <sys:String x:Key="mw/confirm/whathappens">An email with the registration confirmation code has been sent to the email address you provided during registration. Specify it in the field below.</sys:String>
+    <sys:String x:Key="mw/confirm/hint">It has a 6-digit format and consists of Latin letters and numbers, for example, 123ABC</sys:String>
+    <sys:String x:Key="mw/confirm/code">Code:</sys:String>
+    <sys:String x:Key="mw/confirm/cancel">Cancel</sys:String>
+    <sys:String x:Key="mw/confirm/ok">Confirm</sys:String>
+
+
+
+
+    <sys:String x:Key="m/title">Main</sys:String>
+
+    <sys:String x:Key="m/1">New template</sys:String>
+    <sys:String x:Key="m/2">Fill in the template</sys:String>
+    <sys:String x:Key="m/3">My templates</sys:String>
+    <sys:String x:Key="m/4">Settings</sys:String>
+    <sys:String x:Key="m/5">Log out</sys:String>
+
+
+    <sys:String x:Key="m/1/title">Create a new template</sys:String>
+    <sys:String x:Key="m/1/name">Give a name to the template:</sys:String>
+    <sys:String x:Key="m/1/makepass">Protect the template with a password</sys:String>
+    <sys:String x:Key="m/1/writepass">Set the password for the template:</sys:String>
+
+    <sys:String x:Key="m/1/ok">Next</sys:String>
+    <sys:String x:Key="m/1/back">Cancel</sys:String>
+
+</ResourceDictionary>
