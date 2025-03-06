@@ -55,13 +55,13 @@ namespace UPPPDGenerator.Managers
             return string.Empty;
         }
 
-        private string ComputeSHA256Hash(string input)
+        public string ComputeSHA256Hash(string input)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] inputBytes = Encoding.UTF8.GetBytes(input);
                 byte[] hashBytes = sha256.ComputeHash(inputBytes);
-                Console.WriteLine(BitConverter.ToString(hashBytes).Replace("-", "").ToLower());
+                Console.WriteLine($"ВЫЧИСЛЕН ХЕШ: ----   {BitConverter.ToString(hashBytes).Replace("-", "").ToLower()}");
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }

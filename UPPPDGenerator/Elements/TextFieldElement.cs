@@ -12,7 +12,6 @@ namespace UPPPDGenerator.Elements
 {
     public class TextFieldElement
     {
-        public int OrderIndex { get; set; } // Указывает на порядок следования
         public string ElementId { get; private set; }
         public string Placeholder { get; set; } = "Введите текст...";
         public string Description { get; set; } = "Описание поля";

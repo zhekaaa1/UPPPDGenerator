@@ -13,7 +13,6 @@ namespace UPPPDGenerator.Elements
     // Поле ввода даты
     public class DateFieldElement
     {
-        public int OrderIndex { get; set; } // Указывает на порядок следования
         public string ElementId { get; private set; }
         public DateFieldElement()
         {

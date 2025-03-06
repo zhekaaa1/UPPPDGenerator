@@ -20,12 +20,7 @@
                         <Setter Property="Width" Value="50"/>
                     </Style>
                 </StackPanel.Resources>
-                <Button Content="RU" Margin="0,0,20,0" Background="#B2009A" Tag="ru-RU" Click="Button_Click"/>
-                <Button Content="EN" Background="Transparent" BorderBrush="#B2009A" Tag="en-US" Click="Button_Click"/>
             </StackPanel>
-
-
-
         </Grid>
         <Grid VerticalAlignment="Center" Margin="100,0,0,0">
             <StackPanel x:Name="panel">
@@ -40,58 +35,87 @@
 
         <!-- СОЗДАТЬ НОВЫЙ ШАБЛОН -->
         <Border x:Name="createb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
-            
-        <Grid>
-                <Grid.Resources>
 
-                </Grid.Resources>
+            <Grid>
+                <ScrollViewer Margin="50,50,50,120" VerticalScrollBarVisibility="Auto">
+                    
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock Text="{DynamicResource m/1/title}" FontWeight="Bold" FontSize="25"/>
+                        <TextBlock Text="{DynamicResource m/1/name}" FontSize="18" Margin="0,20,0,10"/>
+                        <TextBox AcceptsTab="False" MaxLength="220" FontFamily="{StaticResource Comfortaa}" TextChanged="templateName_TextChanged" x:Name="templateName" TextWrapping="Wrap" Foreground="White" Background="#595959" Padding="5" FontSize="14"/>
+                        <TextBlock x:Name="errorname" Text="* Нежелательно использовать этот символ." Opacity="0" Margin="0,5,0,0" Foreground="Red">
+                            <TextBlock.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard x:Name="ErrorAnimationStoryboard">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="errorname"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0" To="1" Duration="0:0:0.5" AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </TextBlock.Triggers>
+                        </TextBlock>
+                        <TextBlock Text="Дайте описание шаблону (если не заполните, ничего страшного)" Opacity="1" Foreground="White" FontSize="18" Margin="0,20,0,10"/>
+                        <TextBox TextWrapping="Wrap" TextChanged="templateName_TextChanged" AcceptsTab="False" MaxLength="500" MinHeight="50" FontFamily="{StaticResource Comfortaa}" x:Name="description" Background="#595959" Padding="5" FontSize="14" Foreground="White"/>
 
-                <StackPanel Margin="50">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontSize" Value="18"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Margin" Value="5"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                        </Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Foreground" Value="White"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <TextBlock Text="{DynamicResource m/1/title}" FontWeight="Bold" FontSize="25"/>
-                    <TextBlock Text="{DynamicResource m/1/name}" FontSize="18" Margin="0,20,0,10"/>
-                    <Border CornerRadius="5" Background="#595959">
-                        <StackPanel>
-                            <TextBox Text="авававававаа"/>
-                        </StackPanel>
-                    </Border>
 
-                    <CheckBox Background="#595959" Margin="0,20,0,10"
-                              x:Name="defence"
-                              BorderBrush="Transparent"
-                              VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                              Checked="defence_Checked"
-                              Unchecked="defence_Unchecked">
-                        <TextBlock Text="{DynamicResource m/1/makepass}" FontSize="18"/>
-                    </CheckBox>
+                        <TextBlock x:Name="errorname1" Text="* Нежелательно использовать этот символ." Opacity="0" Margin="0,5,0,0" Foreground="Red">
+                            <TextBlock.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard x:Name="ErrorAnimationStoryboard1">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="errorname"
+             Storyboard.TargetProperty="Opacity"
+             From="0" To="1" Duration="0:0:0.5" AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </TextBlock.Triggers>
+                        </TextBlock>
 
-                    <StackPanel Opacity="0" x:Name="passfortemplate">
-                        <TextBlock Text="{DynamicResource m/1/writepass}" FontSize="16"  Margin="0,20,0,10"/>
-                        <Border CornerRadius="5" Background="#595959">
-                            <StackPanel>
-                                <TextBox Text="авававававаа"/>
+
+                        <CheckBox Background="#595959" Margin="0,20,0,10"
+                                  x:Name="useExternalTitle"
+                                  BorderBrush="Transparent"
+                                  VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                  Checked="useExternalTitle_Checked"
+                                  Unchecked="useExternalTitle_Unchecked">
+                            <TextBlock Text="{DynamicResource m/1/useExternalTitle}" FontSize="18"/>
+                        </CheckBox>
+                        <StackPanel Opacity="0" Visibility="Collapsed" x:Name="openFileWithTitle">
+                            <TextBlock Text="Открыть документ" FontSize="16"  Margin="0,20,0,10"/>
+                            <TextBlock><Hyperlink Foreground="#B2009A">Подробности об использовании титульного листа...</Hyperlink></TextBlock>
+                            <Button Content="Выбрать файл..." Click="selectFile_Click" x:Name="selectFile" HorizontalAlignment="Left" Background="Transparent" Foreground="White" BorderBrush="#B2009A" Margin="10" Padding="5"/>
+                            <StackPanel x:Name="selected" Opacity="0" Visibility="Collapsed">
+                                <TextBlock Text="Выбранный файл" FontSize="16" Margin="0,10,0,0"/>
+                                <TextBlock x:Name="selectedFileName" Text="document.docx" Foreground="LightGray" Margin="0,10,0,0"/>
                             </StackPanel>
-                        </Border>
+                        </StackPanel>
+
+                        <CheckBox Background="#595959" Margin="0,20,0,10"
+                                  x:Name="defence"
+                                  BorderBrush="Transparent"
+                                  VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                  Checked="defence_Checked"
+                                  Unchecked="defence_Unchecked">
+                            <TextBlock Text="{DynamicResource m/1/makepass}" FontSize="18"/>
+                        </CheckBox>
+
+                        <StackPanel Opacity="0" x:Name="passfortemplate">
+                            <TextBlock Text="{DynamicResource m/1/writepass}" FontSize="16"  Margin="0,20,0,10"/>
+
+                            <TextBox x:Name="password" FontFamily="{StaticResource Comfortaa}"  TextWrapping="Wrap" Foreground="White" Background="#595959" Padding="5" FontSize="14"/>
+                        </StackPanel>
+
                     </StackPanel>
-
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" >
-
-                </StackPanel>
+                </ScrollViewer>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,50,50">
                     <StackPanel.Resources>
                         <Style TargetType="Button">
@@ -107,434 +131,262 @@
             </Grid>
 
         </Border>
-
+        
 
         <!-- заполнить документ по шаблону -->
         <Border x:Name="fillb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
-
-            <StackPanel Margin="50">
-
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
+            <Grid>
+                <Grid VerticalAlignment="Top" Height="50" Margin="50,0,50,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="По названию " Foreground="White" FontWeight="Thin"/>
+                        <TextBlock Text="(A-Z) ↑" Visibility="Visible" Opacity="1" Foreground="White" FontWeight="Thin"/>
+                        <TextBlock Text="(Z-A) ↓" Visibility="Collapsed" Opacity="0" Foreground="White" FontWeight="Thin"/>
                     </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                            Grid.Column="3" 
-                            Height="30" Width="30" 
-                            Background="Transparent" 
-                            BorderBrush="Transparent"
-                    OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-               Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
                 </Grid>
-
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
+                <ScrollViewer Margin="50" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="chooseTemplates">
+                        
                     </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                            Grid.Column="3" 
-                            Height="30" Width="30" 
-                            Background="Transparent" 
-                            BorderBrush="Transparent"
-                    OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-               Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
-
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
-                    </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                            Grid.Column="3" 
-                            Height="30" Width="30" 
-                            Background="Transparent" 
-                            BorderBrush="Transparent"
-                    OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-               Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
-
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
-                    </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                            Grid.Column="3" 
-                            Height="30" Width="30" 
-                            Background="Transparent" 
-                            BorderBrush="Transparent"
-                    OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-               Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
-            </StackPanel>
+                </ScrollViewer>
+                <TextBlock VerticalAlignment="Center" Foreground="Yellow" HorizontalAlignment="Center" Text="⚠️Внимание! Окно в разработке, может работать неправильно.⚠️"/>
+            </Grid>
         </Border>
 
 
         <Border x:Name="mytemplatesb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
-            <StackPanel Margin="50">
+            <Grid>
 
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
-                    </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                Grid.Column="3" 
-                Height="30" Width="30" 
-                Background="Transparent" 
-                BorderBrush="Transparent"
-        OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/tools.png" 
-   Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
+                <StackPanel Margin="50">
 
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
-                    </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                Grid.Column="3" 
-                Height="30" Width="30" 
-                Background="Transparent" 
-                BorderBrush="Transparent"
-        OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-   Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
+                    <Grid VerticalAlignment="Top" Margin="0,0,0,20">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                <Setter Property="Margin" Value="5"/>
                             </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
+                            <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
+                        </StackPanel>
+                        <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
+                        <Button Cursor="Hand" 
+                    Grid.Column="3" 
+                    Height="30" Width="30" 
+                    Background="Transparent" 
+                    BorderBrush="Transparent"
+            OverridesDefaultStyle="True">
+                            <Button.Resources>
+                                <Style TargetType="Button">
+                                    <!-- Отключаем стандартное выделение и визуальные эффекты -->
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                                    <Grid>
+                                                        <!-- Иконка внутри кнопки -->
+                                                        <Image Source="/resources/imgs/tools.png" 
+       Width="25" Height="25"/>
+                                                    </Grid>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
 
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
-                    </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                Grid.Column="3" 
-                Height="30" Width="30" 
-                Background="Transparent" 
-                BorderBrush="Transparent"
-        OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-   Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
+                    <Grid VerticalAlignment="Top" Margin="0,0,0,20">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                <Setter Property="Margin" Value="5"/>
                             </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
+                            <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
+                        </StackPanel>
+                        <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
+                        <Button Cursor="Hand" 
+                    Grid.Column="3" 
+                    Height="30" Width="30" 
+                    Background="Transparent" 
+                    BorderBrush="Transparent"
+            OverridesDefaultStyle="True" Style="{StaticResource threeDots}">
 
-                <Grid VerticalAlignment="Top" Margin="0,0,0,20">
-                    <Grid.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                            <Setter Property="Margin" Value="5"/>
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                        <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
-                        <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
-                    </StackPanel>
-                    <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
-                    <Button Cursor="Hand" 
-                Grid.Column="3" 
-                Height="30" Width="30" 
-                Background="Transparent" 
-                BorderBrush="Transparent"
-        OverridesDefaultStyle="True">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <!-- Отключаем стандартное выделение и визуальные эффекты -->
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
-                                                <Grid>
-                                                    <!-- Иконка внутри кнопки -->
-                                                    <Image Source="/resources/imgs/three-dots-vertical.png" 
-   Width="25" Height="25"/>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
+                        </Button>
+                    </Grid>
+
+                    <Grid VerticalAlignment="Top" Margin="0,0,0,20">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                <Setter Property="Margin" Value="5"/>
                             </Style>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
-            </StackPanel>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
+                            <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
+                        </StackPanel>
+                        <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
+                        <Button Cursor="Hand" 
+                    Grid.Column="3" 
+                    Height="30" Width="30" 
+                    Background="Transparent" 
+                    BorderBrush="Transparent"
+            OverridesDefaultStyle="True">
+                            <Button.Resources>
+                                <Style TargetType="Button">
+                                    <!-- Отключаем стандартное выделение и визуальные эффекты -->
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                                    <Grid>
+                                                        <!-- Иконка внутри кнопки -->
+                                                        <Image Source="/resources/imgs/three-dots-vertical.png" 
+       Width="25" Height="25"/>
+                                                    </Grid>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
+
+                    <Grid VerticalAlignment="Top" Margin="0,0,0,20">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                <Setter Property="Margin" Value="5"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image  Source="/resources/imgs/pin-angle-fill.png" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Шаблон1" FontWeight="Bold" FontSize="20"/>
+                            <TextBlock Text="Автор: Евгений быстров" FontSize="16"/>
+                        </StackPanel>
+                        <TextBlock VerticalAlignment="Center" Foreground="LightGray" FontSize="14" Text="Последнее изменение: 10.01.2025" Grid.Column="2"/>
+                        <Button Cursor="Hand" 
+                    Grid.Column="3" 
+                    Height="30" Width="30" 
+                    Background="Transparent" 
+                    BorderBrush="Transparent"
+            OverridesDefaultStyle="True">
+                            <Button.Resources>
+                                <Style TargetType="Button">
+                                    <!-- Отключаем стандартное выделение и визуальные эффекты -->
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                                    <Grid>
+                                                        <!-- Иконка внутри кнопки -->
+                                                        <Image Source="/resources/imgs/three-dots-vertical.png" 
+       Width="25" Height="25"/>
+                                                    </Grid>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                <TextBlock VerticalAlignment="Center" Foreground="Yellow" HorizontalAlignment="Center" Text="⚠️Внимание! Окно в разработке, может работать неправильно.⚠️"/>
+            </Grid>
         </Border>
         
         <Border x:Name="settingsb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
-            <StackPanel>
-                
+            <StackPanel Margin="50">
+                <TextBlock Text="Настройки" FontSize="20" Foreground="White" FontWeight="Bold" Margin="10"/>
+                <TextBlock Text="Язык" FontSize="17" Foreground="White"/>
+                <ComboBox SelectionChanged="langComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Width="200" HorizontalAlignment="Left" Margin="0,10,0,0" x:Name="langComboBox">
+                    <ComboBoxItem Content="Русский"/>
+                    <ComboBoxItem Content="English (USA)"/>
+                </ComboBox>
+                <TextBlock VerticalAlignment="Center" Foreground="Yellow" x:Name="warningLabel" Opacity="0" Visibility="Collapsed" HorizontalAlignment="Left" Text="⚠️Внимание! перевод на английский (США) готов менее, чем на 15%. Следите за обновлениями!⚠️"/>
             </StackPanel>
         </Border>
         
         <Border x:Name="logoutb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
-            <StackPanel>
-                
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">
+                <TextBlock TextAlignment="Center" Text="Вы уверены, что желаете выйти из системы?" FontSize="20" Foreground="White" Margin="10"/>
+                <TextBlock TextAlignment="Center" TextWrapping="Wrap" FontSize="16" Foreground="LightGray" Margin="10">
+                    Если вы не защищали Ваши шаблоны паролем, другие пользователи смогут воспользоваться ими в своих целях.
+                    <Hyperlink Foreground="#B2009A">Подробнее...</Hyperlink>
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Height" Value="50"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="200"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="{DynamicResource m/5/back}" Click="Button_Click_1" Background="Transparent" Foreground="White" Margin="0,0,20,0" BorderBrush="#B2009A"/>
+                    <Button Content="{DynamicResource m/5/logout}"  Background="#ff0000" Click="Button_Click" Foreground="White"/>
+                </StackPanel>
             </StackPanel>
         </Border>
-        
-        
+
+        <Grid VerticalAlignment="Bottom" Height="100" Background="#343434">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="100,0,0,0">
+                <TextBlock Text="Пользователь: " Foreground="White" FontSize="16"/>
+                <TextBlock x:Name="logonUserName" Foreground="Gray" FontSize="16"/>
+            </StackPanel>
+        </Grid>
         
         
     </Grid>

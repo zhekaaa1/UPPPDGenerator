@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UPPPDGenerator.DocumentSettings;
 
 namespace UPPPDGenerator.Managers
 {
@@ -19,6 +20,7 @@ namespace UPPPDGenerator.Managers
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public string PasswordHash { get; set; }
@@ -48,5 +50,21 @@ namespace UPPPDGenerator.Managers
         public DateTime ExpiresAt { get; set; }
 
         public virtual User User { get; set; }
+    }
+    public static class LogonUser
+    {
+        public static int Id { get; set; }
+        public static string FullName { get; set; }
+        public static string Email { get; set; }
+        public static DateTime CreatedAt { get; set; }
+    }
+    public static class PreparingTemplate
+    {
+        public static string Name { get; set; }
+        public static string Description { get; set; } = "nodesc";
+        public static string PasswordHash { get; set; } = "ns";
+        public static Settings Settings { get; set; }
+        public static DateTime Createdat { get; set; }
+        public static int CreatedByAuthorId { get; set; }
     }
 }

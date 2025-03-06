@@ -13,7 +13,6 @@ namespace UPPPDGenerator.Elements
     // Поле для подписи
     public class SignatureFieldElement
     {
-        public int OrderIndex { get; set; } // Указывает на порядок следования
         public string ElementId { get; private set; }
         public string LeftLabel { get; set; } = "Подпись";
         public string RightLabel { get; set; } = "Расшифровка";

@@ -38,6 +38,12 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.3.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.3.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -93,6 +99,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\CreateWithoutTitleTemplateWin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\Elements\ButtonOnMainScr.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +119,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DocumentSettings\ImageSettings.cs" />
+    <Compile Include="DocumentSettings\PageSettings.cs" />
+    <Compile Include="DocumentSettings\Settings.cs" />
+    <Compile Include="DocumentSettings\TableSettings.cs" />
+    <Compile Include="DocumentSettings\TextFieldSettings.cs" />
     <Compile Include="Elements\DateFieldElement.cs" />
     <Compile Include="Elements\ImageElement.cs" />
     <Compile Include="Elements\ParagraphElement.cs" />
@@ -121,9 +136,15 @@
     <Compile Include="Managers\LangManager.cs" />
     <Compile Include="Managers\Models.cs" />
     <Compile Include="Managers\PasswordManager.cs" />
+    <Compile Include="Managers\TemplateGENERATOR.cs" />
+    <Compile Include="Managers\TemplateLoader.cs" />
+    <Compile Include="Managers\TemplateManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Windows\CreateTemplateWin.xaml.cs">
       <DependentUpon>CreateTemplateWin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateWithoutTitleTemplateWin.xaml.cs">
+      <DependentUpon>CreateWithoutTitleTemplateWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Elements\ButtonOnMainScr.xaml.cs">
       <DependentUpon>ButtonOnMainScr.xaml</DependentUpon>

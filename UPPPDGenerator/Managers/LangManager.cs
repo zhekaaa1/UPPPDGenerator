@@ -9,6 +9,14 @@ namespace UPPPDGenerator.Managers
 {
     public static class LangManager
     {
+        /// <summary>
+        /// Возвратит 1, если установлен язык Русский, 2 - если английский
+        /// </summary>
+        /// <returns></returns>
+        public static int GetLangNum()
+        {
+            return Properties.Settings.Default.lang == "ru-RU" ? 2 : 1;
+        }
         public static void SetLanguage(string lang)
         {
             Properties.Settings.Default.lang = lang;

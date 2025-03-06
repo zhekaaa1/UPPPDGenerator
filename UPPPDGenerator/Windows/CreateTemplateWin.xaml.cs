@@ -21,7 +21,8 @@ namespace UPPPDGenerator.Windows
     /// </summary>
     public partial class CreateTemplateWin : Window
     {
-        private List<UIElement> elements = new List<UIElement>(); // Список всех элементов
+        //здесь вместо обычного UIElement использовал кортеж
+        private List<(int orderIndex, UIElement element)> elements = new List<(int orderIndex, UIElement element)>(); // Список всех элементов
         private UIElement selectedElement = null; // Выбранный элемент
         public CreateTemplateWin()
         {
@@ -71,14 +72,19 @@ namespace UPPPDGenerator.Windows
                     // Добавляем элемент в контейнер
                     ElementsContainer.Children.Add(newElement);
 
+                    if (!elements.Any())
+                        elements.Add((1, newElement));
+                    else
+                        elements.Add((elements.Count + 1,newElement));
+                    
                     // Добавляем в список элементов
-                    elements.Add(newElement);
+                    
 
                     // Добавляем пунктирную линию
                     Line separator = new Line
                     {
                         X1 = 0,
-                        X2 = DropCanvas.ActualWidth,
+                        X2 = DropCanvas.ActualWidth - 150,
                         Y1 = 0,
                         Y2 = 0,
                         Stroke = Brushes.Gray,
@@ -92,19 +98,60 @@ namespace UPPPDGenerator.Windows
         
         private UIElement CreateElementFromTag(string tag, Point dropPosition)
         {
-            if (tag == "defaultpara")
+            if (tag == "defaultpara" || tag == "emptypara")
             {
                 ParagraphElement paragraphElement = new ParagraphElement();
-                TextBlock textBlock = paragraphElement.ToUIElement();
-                textBlock.Tag = paragraphElement; // Сохраняем модель для этого абзаца
 
-                // Добавляем обработчик клика
+                if (tag == "emptypara")
+                {
+                    paragraphElement.Text = "— пустой абзац —";
+                    paragraphElement.IsEmpty = true;
+                }
+
+                TextBlock textBlock = paragraphElement.ToUIElement();
+                textBlock.Tag = paragraphElement;
+
                 textBlock.MouseLeftButtonDown += OnElementClick;
+                textBlock.LostFocus += OnTextBlockLostFocus;
+                textBlock.PreviewMouseLeftButtonDown += OnTextBlockMouseDown;
 
                 return textBlock;
             }
             return null;
         }
+
+
+        private void OnTextBlockMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2) // Проверяем, что это двойной клик
+            {
+                if (sender is TextBlock textBlockSelected && textBlockSelected.Tag is ParagraphElement model)
+                {
+                    if (model.IsEmpty)
+                    {
+                        textBlockSelected.Text = "";
+                    }
+                }
+            }
+        }
+
+        private void OnTextBlockLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBlock textBlockSelected && textBlockSelected.Tag is ParagraphElement model)
+            {
+                if (string.IsNullOrWhiteSpace(textBlockSelected.Text))
+                {
+                    model.Text = "— пустой абзац —";
+                    model.IsEmpty = true;
+                    textBlockSelected.Text = model.Text;
+                }
+                else
+                {
+                    model.IsEmpty = false;
+                }
+            }
+        }
+
 
         private void OnElementClick(object sender, MouseButtonEventArgs e)
         {
@@ -113,7 +160,7 @@ namespace UPPPDGenerator.Windows
                 // Снимаем выделение со всех элементов
                 foreach (var element in elements)
                 {
-                    if (element is TextBlock tb)
+                    if (element.element is TextBlock tb)
                         tb.Background = Brushes.Transparent;
                     // Аналогично можно обрабатывать и другие типы
                 }
@@ -147,12 +194,22 @@ namespace UPPPDGenerator.Windows
                                 alignmentIndex = 3;
                                 break;
                         }
+                        // Устанавливаем шрифт в выпадающем списке
+                        foreach (ComboBoxItem item in FontFamilyComboBox.Items)
+                        {
+                            if (item.Tag.ToString() == model.FontFamily)
+                            {
+                                FontFamilyComboBox.SelectedItem = item;
+                                break;
+                            }
+                        }
                         AlignmentComboBox.SelectedIndex = alignmentIndex;
                         MarginLeftTextBox.Text = model.MarginLeft.ToString();
                         MarginRightTextBox.Text = model.MarginRight.ToString();
                         MarginTopTextBox.Text = model.MarginTop.ToString();
                         MarginBottomTextBox.Text = model.MarginBottom.ToString();
                         FirstLineIndentationTextBox.Text = model.FirstLineIndentation.ToString();
+
                         switch (model.LineSpacingType)
                         {
                             case "1":
@@ -322,6 +379,27 @@ namespace UPPPDGenerator.Windows
                     LineSpacingMultiplierTextBox.Text = isMultiply ? model.LineSpacingValue.ToString() : string.Empty;
                 }
             }
+        }
+
+        private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (selectedElement is TextBlock textBlockSelected && textBlockSelected.Tag is ParagraphElement model)
+            {
+                if (FontFamilyComboBox.SelectedItem is ComboBoxItem selectedItem)
+                {
+                    string selectedFont = selectedItem.Tag.ToString();
+                    model.FontFamily = selectedFont;
+                    textBlockSelected.FontFamily = new FontFamily(selectedFont);
+                }
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainWin mainWin = new MainWin();
+            mainWin.Show();
+
+            Window.GetWindow(this).Close();
         }
     }
 }

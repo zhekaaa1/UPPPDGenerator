@@ -13,7 +13,6 @@ namespace UPPPDGenerator.Elements
 {
     public class TableElement
     {
-        public int OrderIndex { get; set; } // Указывает на порядок следования
         public string ElementId { get; private set; }
         public int Rows { get; set; } = 2;
         public int Columns { get; set; } = 2;

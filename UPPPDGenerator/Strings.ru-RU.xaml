@@ -49,7 +49,7 @@
     <sys:String x:Key="m/title">Главная</sys:String>
     
     <sys:String x:Key="m/1">Новый шаблон</sys:String>
-    <sys:String x:Key="m/2">Заполнить шаблон</sys:String>
+    <sys:String x:Key="m/2">Заполнить</sys:String>
     <sys:String x:Key="m/3">Мои шаблоны</sys:String>
     <sys:String x:Key="m/4">Настройки</sys:String>
     <sys:String x:Key="m/5">Выйти из системы</sys:String>
@@ -57,12 +57,15 @@
     <sys:String x:Key="m/1/title">Создать новый шаблон</sys:String>
     <sys:String x:Key="m/1/name">Дайте название шаблону:</sys:String>
     <sys:String x:Key="m/1/makepass">Защитить шаблон паролем</sys:String>
+    <sys:String x:Key="m/1/useExternalTitle">Использовать готовый титульный лист</sys:String>
     <sys:String x:Key="m/1/writepass">Задайте пароль для шаблона:</sys:String>
 
     <sys:String x:Key="m/1/ok">Далее</sys:String>
     <sys:String x:Key="m/1/back">Отмена</sys:String>
+    <sys:String x:Key="m/5/back">Назад</sys:String>
+    <sys:String x:Key="m/5/logout">Выйти</sys:String>
 
-
+    
 
 
 </ResourceDictionary>

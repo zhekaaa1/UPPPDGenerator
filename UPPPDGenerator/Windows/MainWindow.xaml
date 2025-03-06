@@ -67,7 +67,7 @@
                             </Style>
                         </StackPanel.Resources>
                         <Button Content="{DynamicResource mw/login}" Margin="0,0,20,0" Background="#B2009A" Click="Button_Click_1"  Tag="tologin"/>
-                        <Button Content="{DynamicResource mw/reg}" Background="Transparent" BorderBrush="#B2009A" Tag="toreg" Click="Button_Click_1"/>
+                        <Button Content="{DynamicResource mw/reg}" Background="Transparent" BorderBrush="#B2009A" Tag="toreg" Foreground="Gray" IsEnabled="False" Click="Button_Click_1"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -114,20 +114,19 @@
                     
                     
                     <TextBlock Text="{DynamicResource mw/email}" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="email" Text="1"/>
+                    <TextBox x:Name="email" Text="" Padding="5"/>
                     <TextBlock Text="{DynamicResource errs/reqfield}" Opacity="0"  x:Name="err1" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
 
                     <TextBlock Text="{DynamicResource mw/pass}" HorizontalAlignment="Left"/>
                     <StackPanel x:Name="hidden" Orientation="Horizontal" Visibility="Visible">
-                        <PasswordBox x:Name="passwordhidden" Width="470" HorizontalAlignment="Left" Password="1"/>
+                        <PasswordBox x:Name="passwordhidden" Padding="5" Width="470" HorizontalAlignment="Left" Password=""/>
                         <Image Source="/resources/imgs/eye-fill.png" Width="20" Margin="10,0,0,0" MouseLeftButtonDown="TogglePasswordVisibility"/>
                     </StackPanel>
                     <StackPanel x:Name="shown" Orientation="Horizontal" Visibility="Collapsed">
-                        <TextBox x:Name="passwordshown" Width="470" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="passwordshown" Padding="5" Width="470" HorizontalAlignment="Left"/>
                         <Image Source="/resources/imgs/eye-slash-fill.png" Width="20" Margin="10,0,0,0" MouseLeftButtonDown="TogglePasswordVisibility"/>
                     </StackPanel>
                     <TextBlock Text="{DynamicResource errs/reqfield}" Opacity="0" x:Name="err2" Foreground="Red" FontSize="12" HorizontalAlignment="Left" Margin="0,0,0,10"/>
-                    
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
                         <StackPanel.Resources>
@@ -138,7 +137,7 @@
                                 <Setter Property="Width" Value="200"/>
                             </Style>
                         </StackPanel.Resources>
-                        <Button Content="{DynamicResource mw/reg/nhaveacc}" Background="Transparent" Margin="0,0,20,0" BorderBrush="#B2009A" Click="Button_Click_1" Tag="nhaveacc"/>
+                        <Button Content="{DynamicResource mw/reg/nhaveacc}" Background="Transparent" IsEnabled="False" Foreground="Gray" Margin="0,0,20,0" BorderBrush="#B2009A" Click="Button_Click_1" Tag="nhaveacc"/>
                         <Button Content="{DynamicResource mw/login}" Background="#B2009A" Click="Button_Click_2"/>
                     </StackPanel>
                 </StackPanel>

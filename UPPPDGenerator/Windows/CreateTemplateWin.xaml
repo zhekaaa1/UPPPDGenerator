@@ -26,6 +26,7 @@
                     <Button Content="RU" Margin="0,0,20,0" Background="#B2009A" Tag="ru-RU" />
                     <Button Content="EN" Background="Transparent" BorderBrush="#B2009A" Tag="en-US"/>
                 </StackPanel>
+                <TextBlock VerticalAlignment="Center" Foreground="Yellow" HorizontalAlignment="Center" Text="⚠️Внимание! Окно в разработке, может работать неправильно.⚠️"/>
             </Grid>
 
 
@@ -49,7 +50,7 @@
                     <DockPanel>
                         <Border DockPanel.Dock="Bottom">
                             <StackPanel>
-                                <Button Content="Назад" Foreground="White" Background="Transparent" Margin="10" Padding="5" BorderBrush="#B2009A" FontSize="16"/>
+                                <Button Content="Назад" Click="Button_Click" Foreground="White" Background="Transparent" Margin="10" Padding="5" BorderBrush="#B2009A" FontSize="16"/>
                                 <Button Content="Дальше" Background="#B2009A" BorderBrush="Transparent" Margin="10" Padding="5" Foreground="White" FontSize="16"/>
                             </StackPanel>
                         </Border>
@@ -65,82 +66,95 @@
                                     </StackPanel.Resources>
 
 
-                                    <TreeView x:Name="ElementTreeView" BorderThickness="0" Background="Transparent" Margin="0,10,0,0">
-                                        <TreeViewItem Tag="n1" IsExpanded="True" Header="Абзацы" FontWeight="Bold" Foreground="White" >
-                                            <TreeViewItem Tag="defaultpara">
-                                                <TreeViewItem.Header>
-                                                    <StackPanel Orientation="Horizontal" Margin="5">
-                                                        <Border BorderThickness="1" BorderBrush="White">
-                                                            <TextBlock Text="Аа" FontSize="12" Foreground="White"/>
-                                                        </Border>
-                                                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычный абзац" FontSize="14" Foreground="White"/>
-                                                    </StackPanel>
-                                                </TreeViewItem.Header>
-                                            </TreeViewItem>
-
-
-                                            <TreeViewItem Tag="n2" Header="Поля ручного ввода" FontWeight="Bold">
-                                                <TreeViewItem Tag="defaultfield">
+                                    <Grid>
+                                        <TreeView x:Name="ElementTreeView" BorderThickness="0" Background="Transparent" Margin="0,10,0,0">
+                                            <TreeViewItem Tag="n1" IsExpanded="True" Header="Абзацы" FontWeight="Bold" Foreground="White" >
+                                                <TreeViewItem Tag="defaultpara">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White">
-                                                                <TextBlock Text="А_" FontSize="12" Foreground="White"/>
+                                                                <TextBlock Text="Аа" FontSize="12" Foreground="White"/>
                                                             </Border>
-                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычное поле ручного ввода" FontSize="14" Foreground="White"/>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычный абзац" FontSize="14" Foreground="White"/>
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
-                                                <TreeViewItem Tag="datafield">
+                                                <TreeViewItem Tag="emptypara">
+                                                    <TreeViewItem.Header>
+                                                        <StackPanel Orientation="Horizontal" Margin="5">
+                                                            <Border BorderThickness="1" BorderBrush="White" Width="18"/>
+                                                            <TextBlock Margin="5,0,0,0" Text="Пустой абзац" VerticalAlignment="Center" FontSize="14" Foreground="White"/>
+                                                        </StackPanel>
+                                                    </TreeViewItem.Header>
+                                                </TreeViewItem>
+                                                <!--"Пустой абзац" Tag="emptypara" PreviewMouseLeftButtonDown="TreeViewItem_PreviewMouseLeftButtonDown"/-->
+
+
+                                                <TreeViewItem Tag="n2" Header="Поля ручного ввода" FontWeight="Bold" Foreground="Gray">
+                                                    <TreeViewItem Tag="defaultfield" IsEnabled="False">
+                                                        <TreeViewItem.Header>
+                                                            <StackPanel Orientation="Horizontal" Margin="5">
+                                                                <Border BorderThickness="1" BorderBrush="White">
+                                                                    <TextBlock Text="А_" FontSize="12" Foreground="White"/>
+                                                                </Border>
+                                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычное поле ручного ввода" FontSize="14" Foreground="White"/>
+                                                            </StackPanel>
+                                                        </TreeViewItem.Header>
+                                                    </TreeViewItem>
+                                                    <TreeViewItem Tag="datafield" IsEnabled="False">
+                                                        <TreeViewItem.Header>
+                                                            <StackPanel Orientation="Horizontal" Margin="5">
+                                                                <Border BorderThickness="1" BorderBrush="White">
+                                                                    <TextBlock Text="12_" FontSize="12" Foreground="White"/>
+                                                                </Border>
+                                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Foreground="Gray" Text="Поле ручного ввода даты" FontSize="14"/>
+                                                            </StackPanel>
+                                                        </TreeViewItem.Header>
+                                                    </TreeViewItem>
+
+                                                    <TreeViewItem Tag="signfield" IsEnabled="False">
+                                                        <TreeViewItem.Header>
+                                                            <StackPanel Orientation="Horizontal" Margin="5">
+                                                                <Border BorderThickness="1" BorderBrush="White">
+                                                                    <TextBlock Text="α_" FontSize="12" Foreground="White"/>
+                                                                </Border>
+                                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Поле для подписи" FontSize="14"  Foreground="Gray"/>
+                                                            </StackPanel>
+                                                        </TreeViewItem.Header>
+                                                    </TreeViewItem>
+                                                </TreeViewItem>
+
+
+
+
+                                            </TreeViewItem>
+                                            <TreeViewItem Tag="n3" IsExpanded="True" Header="Графические" FontWeight="Bold" Foreground="Gray">
+                                                <TreeViewItem Tag="table" IsEnabled="False">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White">
-                                                                <TextBlock Text="12_" FontSize="12" Foreground="White"/>
+                                                                <TextBlock Text="|--" FontSize="12" Foreground="White"/>
                                                             </Border>
-                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Поле ручного ввода даты" FontSize="14" Foreground="White"/>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Таблица" FontSize="14" Foreground="Gray"/>
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
-
-                                                <TreeViewItem Tag="signfield">
+                                                <TreeViewItem Tag="image" IsEnabled="False">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White">
-                                                                <TextBlock Text="α_" FontSize="12" Foreground="White"/>
+                                                                <TextBlock Text="|:::|" FontSize="12" Foreground="White"/>
                                                             </Border>
-                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Поле для подписи" FontSize="14" Foreground="White"/>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Изображение" FontSize="14" Foreground="Gray"/>
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
                                             </TreeViewItem>
 
-
-
-
-                                        </TreeViewItem>
-                                        <TreeViewItem Tag="n3" IsExpanded="True" Header="Графические" FontWeight="Bold">
-                                            <TreeViewItem Tag="table">
-                                                <TreeViewItem.Header>
-                                                    <StackPanel Orientation="Horizontal" Margin="5">
-                                                        <Border BorderThickness="1" BorderBrush="White">
-                                                            <TextBlock Text="|--" FontSize="12" Foreground="White"/>
-                                                        </Border>
-                                                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Таблица" FontSize="14" Foreground="White"/>
-                                                    </StackPanel>
-                                                </TreeViewItem.Header>
-                                            </TreeViewItem>
-                                            <TreeViewItem Tag="image">
-                                                <TreeViewItem.Header>
-                                                    <StackPanel Orientation="Horizontal" Margin="5">
-                                                        <Border BorderThickness="1" BorderBrush="White">
-                                                            <TextBlock Text="|:::|" FontSize="12" Foreground="White"/>
-                                                        </Border>
-                                                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Изображение" FontSize="14" Foreground="White"/>
-                                                    </StackPanel>
-                                                </TreeViewItem.Header>
-                                            </TreeViewItem>
-                                        </TreeViewItem>
-
-                                    </TreeView>
+                                        </TreeView>
+                                        <Rectangle VerticalAlignment="Bottom" Fill=" Black" Height="120" Opacity="0.75"/>
+                                        <TextBlock Text="В разработке" Foreground="White" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="70" FontStyle="Italic"/>
+                                    </Grid>
 
 
                                 </StackPanel>
@@ -155,7 +169,11 @@
                 <!-- ЧЕРНОВИК -->
 
                 <Canvas Name="DropCanvas" AllowDrop="True" Grid.Column="1" DragOver="Canvas_DragOver" Background="White" Drop="Canvas_Drop" Margin="20,70,20,20">
-                    <StackPanel x:Name="ElementsContainer" Orientation="Vertical" Width="Auto"/>
+                    <Border BorderThickness="0,0,1,1" BorderBrush="Black" Width="75" Height="75" Canvas.Left="0"/>
+                    <Border BorderBrush="Black" BorderThickness="1,0,0,1" Width="75" Height="75" Canvas.Right="0"/>
+                    <Border BorderBrush="Black" BorderThickness="0,1,1,0" Width="75" Height="75" Canvas.Left="0" Canvas.Bottom="0"/>
+                    <Border BorderBrush="Black" BorderThickness="1,1,0,0" Width="75" Height="75" Canvas.Right="0" Canvas.Bottom="0"/>
+                    <StackPanel Margin="75" x:Name="ElementsContainer" Orientation="Vertical" Width="Auto"/>
                 </Canvas>
 
                 <!-- ПАНЕЛЬ СВОЙСТВ ДЛЯ АБЗАЦЕВ -->
@@ -167,6 +185,7 @@
                     </Border>
                     <Border CornerRadius="0,0,10,10" Background="#343434">
                         <Grid>
+                            <Button Content="Удалить" VerticalAlignment="Bottom" Margin="10" Background="Red" Foreground="White" Padding="3"/>
                             <StackPanel Margin="10">
                                 <StackPanel.Resources>
                                     <Style TargetType="TextBox">
@@ -176,80 +195,6 @@
                                         <Setter Property="BorderBrush" Value="#303030"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="Padding" Value="5"/>
-                                    </Style>
-                                    <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
-                                        <Setter Property="Foreground" Value="White" />
-                                        <Setter Property="Background" Value="#595959" />
-                                        <Setter Property="BorderBrush" Value="#303030" />
-                                        <Setter Property="Padding" Value="5"/>
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ComboBox">
-                                                    <Grid>
-                                                        <ToggleButton x:Name="ToggleButton"
-                                  Grid.Column="2"
-                                  Focusable="false"
-                                  IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                  ClickMode="Press">
-                                                            <ToggleButton.Template>
-                                                                <ControlTemplate>
-                                                                    <Grid>
-                                                                        <Border x:Name="ToggleBorder" 
-                                            Background="{TemplateBinding Background}" 
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="1"/>
-                                                                        <Path x:Name="Arrow"
-                                          HorizontalAlignment="Right"
-                                          Margin="0,0,4,0"
-                                          Data="M 0 0 L 4 4 L 8 0 Z"
-                                          Fill="White"/>
-                                                                    </Grid>
-                                                                </ControlTemplate>
-                                                            </ToggleButton.Template>
-                                                        </ToggleButton>
-
-                                                        <!-- Оборачиваем ContentPresenter в Border для поддержки Background и Foreground -->
-                                                        <Border x:Name="ContentBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1"
-                            Margin="3,3,23,3"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left">
-                                                            <ContentPresenter x:Name="ContentSite"
-                                          IsHitTestVisible="False"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Left"/>
-                                                        </Border>
-
-                                                        <Popup x:Name="Popup" Placement="Bottom"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           PopupAnimation="Slide">
-                                                            <Grid x:Name="DropDown"
-                              SnapsToDevicePixels="True"
-                              MinWidth="{TemplateBinding ActualWidth}"
-                              Background="{TemplateBinding Background}">
-                                                                <Border x:Name="DropDownBorder"
-                                    BorderThickness="1"
-                                    BorderBrush="{TemplateBinding BorderBrush}"/>
-                                                                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                                                </ScrollViewer>
-                                                            </Grid>
-                                                        </Popup>
-                                                    </Grid>
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsEnabled" Value="False">
-                                                            <Setter TargetName="ContentBorder" Property="Background" Value="Gray"/>
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
                                     </Style>
                                 </StackPanel.Resources>
                                 
@@ -264,6 +209,12 @@
                                     <StackPanel>
                                         <TextBlock HorizontalAlignment="Left" Margin="5" Text="Название" Foreground="White"/>
                                         <TextBox Margin="5" TextChanged="TitleTextBox_TextChanged" x:Name="TitleTextBox"/>
+                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Шрифт" Foreground="White" VerticalAlignment="Center"/>
+                                        <ComboBox Style="{StaticResource CustomComboBoxStyle}" x:Name="FontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged">
+                                            <ComboBoxItem Content="Times New Roman" Tag="Times New Roman"/>
+                                            <ComboBoxItem Content="Arial" Tag="Arial"/>
+                                            <ComboBoxItem Content="Calibri" Tag="Calibri"/>
+                                        </ComboBox>
                                         <TextBlock HorizontalAlignment="Left" Margin="5" Text="Размер шрифта (в пт)" Foreground="White"/>
                                         <TextBox Margin="5" TextChanged="FontSizeTextBox_TextChanged" x:Name="FontSizeTextBox"/>
                                         <TextBlock HorizontalAlignment="Left" Margin="5" Text="Выравнивание (в пределах страницы)" Foreground="White" VerticalAlignment="Center"/>
@@ -286,6 +237,10 @@
                                         <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ снизу (в см)" Foreground="White" VerticalAlignment="Center"/>
                                         <TextBox x:Name="MarginBottomTextBox" TextChanged="MarginBottomTextBox_TextChanged"  Margin="5"/>
 
+                                        
+
+                                        
+                                        
                                         <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ первой строки (в см)" Foreground="White" VerticalAlignment="Center"/>
                                         <TextBox x:Name="FirstLineIndentationTextBox" TextChanged="FirstLineIndentationTextBox_TextChanged"  Margin="5"/>
 
@@ -300,6 +255,7 @@
                                         <TextBlock x:Name="LineSpacingMultiplierLabel" HorizontalAlignment="Left" Margin="5" Text="Множитель (в pt)" Foreground="White" VerticalAlignment="Center" Visibility="Collapsed"/>
                                         <TextBox x:Name="LineSpacingMultiplierTextBox" TextChanged="LineSpacingMultiplierTextBox_TextChanged"  Margin="5" Visibility="Collapsed"/>
 
+                                        
                                     </StackPanel>
                                 </ScrollViewer>
                             </StackPanel>

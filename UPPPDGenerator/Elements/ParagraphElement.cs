@@ -12,11 +12,11 @@ namespace UPPPDGenerator.Elements
 {
     public class ParagraphElement
     {
-        public int OrderIndex { get; set; } // Указывает на порядок следования
         public string ElementId { get; private set; } // Уникальный идентификатор
         public string Text { get; set; } = "Введите текст..."; // Текст абзаца
-        public string FontFamily { get; set; } = "Arial"; // Шрифт
+        public string FontFamily { get; set; } = "Times New Roman"; // Шрифт
         public double FontSize { get; set; } = 14; // Размер шрифта
+        public bool IsEmpty { get; set; } = true;
         public TextAlignment Alignment { get; set; } = TextAlignment.Left; // Выравнивание текста
         public Thickness Margin { get; set; } = new Thickness(0,0,0,0); // Отступы
 

@@ -13,9 +13,19 @@ namespace UPPPDGenerator.Elements
 {
     public class ImageElement
     {
-        public int OrderIndex { get; set; } // Указывает на порядок следования
         public string ElementId { get; private set; }
-        public string ImagePath { get; set; } = "";
+        public string ImageName { get; set; } = "image.png"; // Название файла
+        public string Alignment { get; set; } = "Center"; // Выравнивание: Left, Center, Right
+
+        // Отступы в относительных значениях (0.0 - 1.0)
+        public double MarginLeft { get; set; } = 0.1;
+        public double MarginTop { get; set; } = 0.1;
+        public double MarginRight { get; set; } = 0.1;
+        public double MarginBottom { get; set; } = 0.1;
+
+        // Фиктивное изображение (по умолчанию будет заполнено при сохранении)
+        public bool IsPlaceholder { get; set; } = false;
+        public string PlaceholderImagePath { get; set; } = string.Empty; // Путь к фиктивному изображению
         public double Width { get; set; } = 100;
         public double Height { get; set; } = 100;
         public Thickness Margin { get; set; } = new Thickness(0);
@@ -44,11 +54,11 @@ namespace UPPPDGenerator.Elements
                 Stretch = Stretch.Uniform
             };
 
-            if (!string.IsNullOrEmpty(ImagePath))
+            if (!string.IsNullOrEmpty(PlaceholderImagePath))
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                bitmap.UriSource = new Uri(ImagePath, UriKind.RelativeOrAbsolute);
+                bitmap.UriSource = new Uri(PlaceholderImagePath, UriKind.RelativeOrAbsolute);
                 bitmap.EndInit();
                 img.Source = bitmap;
             }

@@ -123,14 +123,18 @@ namespace UPPPDGenerator
 
             bool passshown = hidden.Visibility == Visibility.Collapsed;
 
-            ApiManager apiManager = new ApiManager();
-            IEnumerable<User> allusers = await apiManager.GetUsersAsync();
 
-            User found = allusers.FirstOrDefault(user => user.Email == mail && user.PasswordHash == pass);
+            UserManager userManager = new UserManager();
+            User found = await userManager.Authorize(mail, pass);
+
+            //User found = allusers.FirstOrDefault(user => user.Email == mail && user.PasswordHash == pass);
 
 
             if (found != null)
             {
+                Properties.Settings.Default.userid = found.Id;
+                await userManager.SetLogonUser(found.Id);
+
                 AnimateBorder(email, Colors.Green); // Зеленая подсветка
                 if (passshown) AnimateBorder(passwordshown, Colors.Green); // Зеленая подсветка
                 else AnimateBorder(passwordhidden, Colors.Green);
@@ -140,12 +144,8 @@ namespace UPPPDGenerator
                 
                 MainWin mainWin = new MainWin();
                 mainWin.Show();
-                // Открываем новое окно
-                //MainAppWindow mainAppWindow = new MainAppWindow();
-                //mainAppWindow.Show();
 
-                // Закрываем текущее окно
-                //Window.GetWindow(this)?.Close();
+                Window.GetWindow(this)?.Close();
             }
             else
             {
