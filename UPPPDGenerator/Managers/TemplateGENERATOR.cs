@@ -12,7 +12,7 @@ namespace UPPPDGenerator.Managers
         public static async void BeginWithoutTitle(string titleListPath, DocumentSettings.Settings documentSettings)
         {
             string docxPath = titleListPath;
-            string jsonPath = $"D:\\Templates\\{PreparingTemplate.Name}.json";
+            string jsonPath = $"C:\\Templates\\{PreparingTemplate.Name}.json";
 
             // Извлекаем OpenXML
             string openXml = GetOpenXmlFromDocx(docxPath);

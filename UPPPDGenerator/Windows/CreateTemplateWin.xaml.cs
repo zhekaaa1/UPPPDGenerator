@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using UPPPDGenerator.Elements;
+using UPPPDGenerator.Managers;
 
 namespace UPPPDGenerator.Windows
 {
@@ -28,6 +29,7 @@ namespace UPPPDGenerator.Windows
         {
             InitializeComponent();
             AddHandlersToTreeViewItems(ElementTreeView);
+            templateName.Text = PreparingTemplate.Name;
         }
 
         private void AddHandlersToTreeViewItems(ItemsControl parent)

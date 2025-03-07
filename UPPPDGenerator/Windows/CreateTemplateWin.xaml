@@ -13,7 +13,7 @@
         <Grid Background="#222222">
             <Grid VerticalAlignment="Top" Background="#343434" Height="50">
                 <Image Source="{StaticResource icon}" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
-                <TextBlock Text="Шаблон1" FontSize="25" VerticalAlignment="Center" Margin="100,0,0,0" Foreground="White"/>
+                <TextBlock x:Name="templateName" FontSize="25" VerticalAlignment="Center" Margin="100,0,0,0" Width="400" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"  Foreground="White"/>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
                     <StackPanel.Resources>
                         <Style TargetType="Button">

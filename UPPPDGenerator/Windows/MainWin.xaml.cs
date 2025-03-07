@@ -129,14 +129,14 @@ namespace UPPPDGenerator.Windows
         {
             if (useExternalTitle.IsChecked == true && SelectedFilePath != string.Empty)
             {
-                if (string.IsNullOrEmpty(templateName.Text))
+                if (string.IsNullOrEmpty(templateName.Text.Trim())|| templateName.Text == " ")
                 {
-                    errorname.Text = "* Назовите свой документ!";
+                    errorname.Text = "* Назовите документ!";
                     ShowErrorMessage(errorname);
                     return;
                 }
                 PreparingTemplate.Createdat = DateTime.Now;
-                PreparingTemplate.Name = templateName.Text;
+                PreparingTemplate.Name = templateName.Text.Trim();
                 PreparingTemplate.CreatedByAuthorId = Properties.Settings.Default.userid;
                 PreparingTemplate.Description = description.Text;
                 PreparingTemplate.PasswordHash = password.Text;
@@ -148,14 +148,14 @@ namespace UPPPDGenerator.Windows
             }
             else
             {
-                if (string.IsNullOrEmpty(templateName.Text))
+                if (string.IsNullOrEmpty(templateName.Text.Trim()) || templateName.Text == " ")
                 {
                     errorname.Text = "* Назовите свой документ!";
                     ShowErrorMessage(errorname);
                     return;
                 }
                 PreparingTemplate.Createdat = DateTime.Now;
-                PreparingTemplate.Name = templateName.Text;
+                PreparingTemplate.Name = templateName.Text.Trim();
                 PreparingTemplate.CreatedByAuthorId = Properties.Settings.Default.userid;
                 PreparingTemplate.Description = description.Text;
                 PreparingTemplate.PasswordHash = password.Text;

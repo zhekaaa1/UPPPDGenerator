@@ -467,13 +467,13 @@ x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
                                 <ComboBoxItem Content="Другой..."/>
                             </ComboBox>
                         </StackPanel>
-                        <Rectangle Fill="Black" Opacity="0.75"/>
+                        <Rectangle Fill="Black" Opacity="0.90"/>
                         <TextBlock Text="В разработке" VerticalAlignment="Center" HorizontalAlignment="Center" FontStyle="Italic" Foreground="LightGray"/>
                     </Grid>
                     <StackPanel x:Name="chooseTemplateFile">
                         <TextBlock Text="Выбрать файл шаблона"/>
                         <Button Content="Выбрать..." x:Name="ChoiseFileForTemplate" Click="ChoiseFileForTemplate_Click" HorizontalAlignment="Left" Padding="5" Margin="10" Background="Transparent" Foreground="White" BorderBrush="#B2009A"/>
-                        <StackPanel x:Name="choosenFile">
+                        <StackPanel x:Name="choosenFile" Opacity="0" Visibility="Collapsed">
                             <TextBlock Text="Выбран файл" FontSize="14"/>
                             <TextBlock Text="Document.json" x:Name="templateName" Foreground="LightGray" Margin="10,0,10,10" FontSize="14"/>
                         </StackPanel>
@@ -615,8 +615,9 @@ x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
                                     <TextBlock x:Name="tableNumberColumns"/>
                                     <TextBlock x:Name="tableColorizeHeaders"/>
                                     <TextBlock x:Name="tableHeaderColor"/>
-                                    <TextBlock x:Name="tableUseDefaultParagraphSettings"/>
+                                    <TextBlock/>
                                     <StackPanel Margin="10,0,0,0">
+                                        <TextBlock x:Name="tableUseDefaultParagraphSettings"/>
                                         <TextBlock x:Name="tableFontFamily"/>
                                         <TextBlock x:Name="tableFontSize"/>
                                         <TextBlock x:Name="tableParagraphAlignment"/>

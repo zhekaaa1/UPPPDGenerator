@@ -355,7 +355,7 @@
                     <ComboBoxItem Content="Русский"/>
                     <ComboBoxItem Content="English (USA)"/>
                 </ComboBox>
-                <TextBlock VerticalAlignment="Center" Foreground="Yellow" x:Name="warningLabel" Opacity="0" Visibility="Collapsed" HorizontalAlignment="Left" Text="⚠️Внимание! перевод на английский (США) готов менее, чем на 15%. Следите за обновлениями!⚠️"/>
+                <TextBlock VerticalAlignment="Center" Foreground="Yellow" x:Name="warningLabel" Opacity="0" Visibility="Collapsed" HorizontalAlignment="Left" Text="⚠️Attention! The translation into English (USA) is less than 15% complete. Stay tuned for updates!⚠️"/>
             </StackPanel>
         </Border>
         
