@@ -4,15 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UPPPDGenerator.Windows"
+        xmlns:cl="clr-namespace:UPPPDGenerator.Windows.Elements"
         mc:Ignorable="d"
         Title="CreateTemplateWin" Height="1080" Width="1920" WindowState="Maximized">
-    
-
+    <Window.Resources>
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+     From="0" To="1"
+     Duration="0:0:0.2"
+     BeginTime="0:0:0.2" />
+        </Storyboard>
+        <Storyboard x:Key="FadeOutAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+     To="0"
+     Duration="0:0:0.2"
+     BeginTime="0:0:0.2" />
+        </Storyboard>
+    </Window.Resources>
     <Grid>
-
         <Grid Background="#222222">
             <Grid VerticalAlignment="Top" Background="#343434" Height="50">
-                <Image Source="{StaticResource icon}" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <Image Source="/resources/imgs/icon.png" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
                 <TextBlock x:Name="templateName" FontSize="25" VerticalAlignment="Center" Margin="100,0,0,0" Width="400" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"  Foreground="White"/>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
                     <StackPanel.Resources>
@@ -26,18 +38,13 @@
                     <Button Content="RU" Margin="0,0,20,0" Background="#B2009A" Tag="ru-RU" />
                     <Button Content="EN" Background="Transparent" BorderBrush="#B2009A" Tag="en-US"/>
                 </StackPanel>
-                <TextBlock VerticalAlignment="Center" Foreground="Yellow" HorizontalAlignment="Center" Text="⚠️Внимание! Окно в разработке, может работать неправильно.⚠️"/>
             </Grid>
-
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-
-
                 <!-- ПАНЕЛЬ ЭЛЕМЕНТОВ -->
                 <Grid Margin="20,70,20,20" VerticalAlignment="Top" Grid.Column="0">
                     <Border DockPanel.Dock="Top" Margin="0,0,0,5" CornerRadius="10,10,0,0" Background="#343434">
@@ -51,7 +58,7 @@
                         <Border DockPanel.Dock="Bottom">
                             <StackPanel>
                                 <Button Content="Назад" Click="Button_Click" Foreground="White" Background="Transparent" Margin="10" Padding="5" BorderBrush="#B2009A" FontSize="16"/>
-                                <Button Content="Дальше" Background="#B2009A" BorderBrush="Transparent" Margin="10" Padding="5" Foreground="White" FontSize="16"/>
+                                <Button Content="Дальше" Background="#B2009A" BorderBrush="Transparent" Margin="10" Padding="5" Click="Button_Click_1" Foreground="White" FontSize="16"/>
                             </StackPanel>
                         </Border>
                         <Border CornerRadius="0,0,10,10" Background="#343434" DockPanel.Dock="Bottom">
@@ -64,12 +71,15 @@
                                             <Setter Property="Margin" Value="0,10,0,0"/>
                                         </Style>
                                     </StackPanel.Resources>
-
-
                                     <Grid>
-                                        <TreeView x:Name="ElementTreeView" BorderThickness="0" Background="Transparent" Margin="0,10,0,0">
-                                            <TreeViewItem Tag="n1" IsExpanded="True" Header="Абзацы" FontWeight="Bold" Foreground="White" >
-                                                <TreeViewItem Tag="defaultpara">
+                                        <TreeView x:Name="ElementTreeView" 
+                                                  PreviewMouseMove="ElementTreeView_PreviewMouseMove"
+                                                  MouseDoubleClick="ElementTreeView_MouseDoubleClick"
+                                                  BorderThickness="0" 
+                                                  Background="Transparent" 
+                                                  Margin="0,10,0,0">
+                                            <TreeViewItem Tag="n1" IsExpanded="True" Header="Абзацы и поля" FontWeight="Bold" Foreground="White" >
+                                                <TreeViewItem Tag="defaultpara" ToolTip="Фиксированный абзац. Неизменяемый текст, отображаемый как есть.">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White">
@@ -79,7 +89,7 @@
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
-                                                <TreeViewItem Tag="emptypara">
+                                                <TreeViewItem Tag="emptypara" ToolTip="Пустой абзац. Используется для создания отступов.">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White" Width="18"/>
@@ -87,191 +97,674 @@
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
-                                                <!--"Пустой абзац" Tag="emptypara" PreviewMouseLeftButtonDown="TreeViewItem_PreviewMouseLeftButtonDown"/-->
-
-
-                                                <TreeViewItem Tag="n2" Header="Поля ручного ввода" FontWeight="Bold" Foreground="Gray">
-                                                    <TreeViewItem Tag="defaultfield" IsEnabled="False">
-                                                        <TreeViewItem.Header>
-                                                            <StackPanel Orientation="Horizontal" Margin="5">
-                                                                <Border BorderThickness="1" BorderBrush="White">
-                                                                    <TextBlock Text="А_" FontSize="12" Foreground="White"/>
-                                                                </Border>
-                                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Обычное поле ручного ввода" FontSize="14" Foreground="White"/>
-                                                            </StackPanel>
-                                                        </TreeViewItem.Header>
-                                                    </TreeViewItem>
-                                                    <TreeViewItem Tag="datafield" IsEnabled="False">
-                                                        <TreeViewItem.Header>
-                                                            <StackPanel Orientation="Horizontal" Margin="5">
-                                                                <Border BorderThickness="1" BorderBrush="White">
-                                                                    <TextBlock Text="12_" FontSize="12" Foreground="White"/>
-                                                                </Border>
-                                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Foreground="Gray" Text="Поле ручного ввода даты" FontSize="14"/>
-                                                            </StackPanel>
-                                                        </TreeViewItem.Header>
-                                                    </TreeViewItem>
-
-                                                    <TreeViewItem Tag="signfield" IsEnabled="False">
-                                                        <TreeViewItem.Header>
-                                                            <StackPanel Orientation="Horizontal" Margin="5">
-                                                                <Border BorderThickness="1" BorderBrush="White">
-                                                                    <TextBlock Text="α_" FontSize="12" Foreground="White"/>
-                                                                </Border>
-                                                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Поле для подписи" FontSize="14"  Foreground="Gray"/>
-                                                            </StackPanel>
-                                                        </TreeViewItem.Header>
-                                                    </TreeViewItem>
-                                                </TreeViewItem>
-
-
-
-
-                                            </TreeViewItem>
-                                            <TreeViewItem Tag="n3" IsExpanded="True" Header="Графические" FontWeight="Bold" Foreground="Gray">
-                                                <TreeViewItem Tag="table" IsEnabled="False">
+                                                <TreeViewItem Tag="fieldtofill" IsEnabled="True" ToolTip="Поле, которое будет автоматически заполнено при генерации. Эти данные будет необходимо внести во время заполнения документа по шаблону.">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White">
-                                                                <TextBlock Text="|--" FontSize="12" Foreground="White"/>
+                                                                <TextBlock Text="&gt; a" FontSize="12" Foreground="White"/>
                                                             </Border>
-                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Таблица" FontSize="14" Foreground="Gray"/>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Данные" FontSize="14" Foreground="White"/>
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
-                                                <TreeViewItem Tag="image" IsEnabled="False">
+                                            </TreeViewItem>
+                                            <TreeViewItem Tag="n3" IsExpanded="True" Header="Прочее" FontWeight="Bold" Foreground="White">
+                                                <TreeViewItem Tag="separator" IsEnabled="True" ToolTip="Разделитель. Используется для визуального отделения блоков.">
                                                     <TreeViewItem.Header>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
                                                             <Border BorderThickness="1" BorderBrush="White">
-                                                                <TextBlock Text="|:::|" FontSize="12" Foreground="White"/>
+                                                                <TextBlock Text="---" FontSize="12" Foreground="White"/>
                                                             </Border>
-                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Изображение" FontSize="14" Foreground="Gray"/>
+                                                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="Разделитель" FontSize="14" Foreground="White"/>
                                                         </StackPanel>
                                                     </TreeViewItem.Header>
                                                 </TreeViewItem>
                                             </TreeViewItem>
 
                                         </TreeView>
-                                        <Rectangle VerticalAlignment="Bottom" Fill=" Black" Height="120" Opacity="0.75"/>
-                                        <TextBlock Text="В разработке" Foreground="White" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="70" FontStyle="Italic"/>
                                     </Grid>
-
-
                                 </StackPanel>
                             </Grid>
                         </Border>
-                        
                     </DockPanel>
-                    
                 </Grid>
-
-
                 <!-- ЧЕРНОВИК -->
+                <ScrollViewer AllowDrop="True" Grid.Column="1" VerticalScrollBarVisibility="Auto" Background="#343434" Margin="20,70,20,20">
+                    <Grid  Margin="80">
 
-                <Canvas Name="DropCanvas" AllowDrop="True" Grid.Column="1" DragOver="Canvas_DragOver" Background="White" Drop="Canvas_Drop" Margin="20,70,20,20">
-                    <Border BorderThickness="0,0,1,1" BorderBrush="Black" Width="75" Height="75" Canvas.Left="0"/>
-                    <Border BorderBrush="Black" BorderThickness="1,0,0,1" Width="75" Height="75" Canvas.Right="0"/>
-                    <Border BorderBrush="Black" BorderThickness="0,1,1,0" Width="75" Height="75" Canvas.Left="0" Canvas.Bottom="0"/>
-                    <Border BorderBrush="Black" BorderThickness="1,1,0,0" Width="75" Height="75" Canvas.Right="0" Canvas.Bottom="0"/>
-                    <StackPanel Margin="75" x:Name="ElementsContainer" Orientation="Vertical" Width="Auto"/>
-                </Canvas>
-
-                <!-- ПАНЕЛЬ СВОЙСТВ ДЛЯ АБЗАЦЕВ -->
-                <DockPanel x:Name="PropertyPanel_Paragraphs" Visibility="Visible" Opacity="1" Grid.Column="2" Margin="20,70,20,20">
+                        <StackPanel Background="Transparent" DragEnter="TitlePagePanel_DragEnter" 
+                                    DragOver="TitlePagePanel_DragOver" Drop="TitlePagePanel_Drop" Width="860" Orientation="Vertical"  
+                                    AllowDrop="True" x:Name="TitlePagePanel"/>
+                        <Rectangle x:Name="InsertionMarker"
+                               Height="2"
+                               Fill="#9f00ff"
+                               Visibility="Collapsed"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Stretch"
+                               Panel.ZIndex="1000"/>
+                    </Grid>
+                </ScrollViewer>
+                <DockPanel x:Name="GeneralPropertyPanel" Visibility="Collapsed" Opacity="1" Grid.Column="2" Margin="20,70,20,20">
                     <Border DockPanel.Dock="Top" Margin="0,0,0,5" CornerRadius="10,10,0,0" Background="#343434">
                         <Grid>
-                            <TextBlock Text="Свойства" Padding="10" Foreground="White" FontSize="18"/>
-                        </Grid>
-                    </Border>
-                    <Border CornerRadius="0,0,10,10" Background="#343434">
-                        <Grid>
-                            <Button Content="Удалить" VerticalAlignment="Bottom" Margin="10" Background="Red" Foreground="White" Padding="3"/>
-                            <StackPanel Margin="10">
-                                <StackPanel.Resources>
-                                    <Style TargetType="TextBox">
-                                        <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                                        <Setter Property="FontSize" Value="14"/>
-                                        <Setter Property="Background" Value="#595959"/>
-                                        <Setter Property="BorderBrush" Value="#303030"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                        <Setter Property="Padding" Value="5"/>
-                                    </Style>
-                                </StackPanel.Resources>
-                                
-                                
-                                
-                                <!-- Заголовок панели -->
-                                <TextBlock HorizontalAlignment="Left"
-                                    Text="Абзац" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,10" />
-                                
-                                <!-- свойства -->
-                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <StackPanel>
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Название" Foreground="White"/>
-                                        <TextBox Margin="5" TextChanged="TitleTextBox_TextChanged" x:Name="TitleTextBox"/>
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Шрифт" Foreground="White" VerticalAlignment="Center"/>
-                                        <ComboBox Style="{StaticResource CustomComboBoxStyle}" x:Name="FontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged">
-                                            <ComboBoxItem Content="Times New Roman" Tag="Times New Roman"/>
-                                            <ComboBoxItem Content="Arial" Tag="Arial"/>
-                                            <ComboBoxItem Content="Calibri" Tag="Calibri"/>
-                                        </ComboBox>
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Размер шрифта (в пт)" Foreground="White"/>
-                                        <TextBox Margin="5" TextChanged="FontSizeTextBox_TextChanged" x:Name="FontSizeTextBox"/>
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Выравнивание (в пределах страницы)" Foreground="White" VerticalAlignment="Center"/>
-                                        <ComboBox Style="{StaticResource CustomComboBoxStyle}" Margin="5"
-                                                    x:Name="AlignmentComboBox" VerticalAlignment="Center" SelectionChanged="AlignmentComboBox_SelectionChanged">
-                                            <ComboBoxItem Content="По левому краю"/>
-                                            <ComboBoxItem Content="По правому краю"/>
-                                            <ComboBoxItem Content="По центру"/>
-                                            <ComboBoxItem Content="По ширине"/>
-                                        </ComboBox>
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ слева (в см)" Foreground="White" VerticalAlignment="Center"/>
-                                        <TextBox x:Name="MarginLeftTextBox" TextChanged="MarginLeftTextBox_TextChanged" Margin="5"/>
-
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ справа (в см)" Foreground="White" VerticalAlignment="Center"/>
-                                        <TextBox x:Name="MarginRightTextBox" TextChanged="MarginRightTextBox_TextChanged"  Margin="5"/>
-
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ сверху (в см)" Foreground="White" VerticalAlignment="Center"/>
-                                        <TextBox x:Name="MarginTopTextBox" TextChanged="MarginTopTextBox_TextChanged"  Margin="5"/>
-
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ снизу (в см)" Foreground="White" VerticalAlignment="Center"/>
-                                        <TextBox x:Name="MarginBottomTextBox" TextChanged="MarginBottomTextBox_TextChanged"  Margin="5"/>
-
-                                        
-
-                                        
-                                        
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Отступ первой строки (в см)" Foreground="White" VerticalAlignment="Center"/>
-                                        <TextBox x:Name="FirstLineIndentationTextBox" TextChanged="FirstLineIndentationTextBox_TextChanged"  Margin="5"/>
-
-                                        <TextBlock HorizontalAlignment="Left" Margin="5" Text="Межстрочный интервал" Foreground="White" VerticalAlignment="Center"/>
-                                        <ComboBox Style="{StaticResource CustomComboBoxStyle}" x:Name="LineSpacingComboBox" SelectionChanged="LineSpacingComboBox_SelectionChanged"  Margin="5">
-                                            <ComboBoxItem Content="Одинарный" Tag="1"/>
-                                            <ComboBoxItem Content="Полуторный" Tag="1.5"/>
-                                            <ComboBoxItem Content="Двойной" Tag="2"/>
-                                            <ComboBoxItem Content="Множитель" Tag="multiply"/>
-                                        </ComboBox>
-
-                                        <TextBlock x:Name="LineSpacingMultiplierLabel" HorizontalAlignment="Left" Margin="5" Text="Множитель (в pt)" Foreground="White" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                        <TextBox x:Name="LineSpacingMultiplierTextBox" TextChanged="LineSpacingMultiplierTextBox_TextChanged"  Margin="5" Visibility="Collapsed"/>
-
-                                        
-                                    </StackPanel>
-                                </ScrollViewer>
+                            <TextBlock Text="Свойства" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold" Padding="10" Foreground="White" FontSize="18"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <Button Content="Сохранить" Margin="10" Foreground="White" Background="Transparent" BorderBrush="#9a00bc" BorderThickness="1" Padding="5" x:Name="SaveButton" Click="SaveButton_Click"/>
+                                <Button Content="Удалить" Click="DeleteButton_Click"  Name="DeleteButton" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10" Foreground="White" Background="Red" BorderThickness="0" Padding="5"/>
                             </StackPanel>
-                            
                         </Grid>
                     </Border>
-                </DockPanel>
+                    <ScrollViewer Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <Grid>
 
-                
-                <!-- ДЛЯ других элементов. -->
-                <Grid Grid.Column="2" Margin="20,70,20,20" Visibility="Collapsed">
-                    
-                </Grid>
-                
-                
+
+                            <!-- ПАНЕЛЬ СВОЙСТВ ДЛЯ ОБЫЧНЫХ АБЗАЦЕВ -->
+                            <Border x:Name="DefaultParagraphPropertyPanel" Visibility="Collapsed" CornerRadius="0,0,10,10" Background="#343434">
+                                <Grid>
+                                    <StackPanel Margin="10">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                                <Setter Property="FontSize" Value="14"/>
+                                                <Setter Property="Background" Value="#595959"/>
+                                                <Setter Property="BorderBrush" Value="#303030"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Padding" Value="5"/>
+                                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                <Setter Property="Width" Value="250"/>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <TextBlock HorizontalAlignment="Left" Text="Обычный абзац" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,10" />
+                                        <StackPanel Margin="10">
+                                            <StackPanel.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                    <Setter Property="Margin" Value="10"/>
+                                                    <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                                    <Setter Property="FontSize" Value="14"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Style>
+                                            </StackPanel.Resources>
+                                            <Expander Header="Текст" FontSize="14" IsExpanded="True" Foreground="White">
+                                                <StackPanel>
+                                                    <!-- ТЕКСТ -->
+                                                    <TextBlock Text="Текст"/>
+                                                    <TextBox x:Name="E1TitleTextBox"/>
+                                                    <!-- ШРИФТ -->
+                                                    <TextBlock Text="Шрифт"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="250" HorizontalAlignment="Left" x:Name="E1FontFamilyComboBox" SelectedIndex="0">
+                                                        <ComboBoxItem Content="Times New Roman"/>
+                                                        <ComboBoxItem Content="Arial"/>
+                                                        <ComboBoxItem Content="Calibri"/>
+                                                    </ComboBox>
+                                                    <!-- РАЗМЕР ШРИФТА -->
+                                                    <TextBlock Text="Размер шрифта (в пт)"/>
+                                                    <ComboBox SelectedIndex="5" Style="{StaticResource CustomComboBoxStyle}"  Width="250" HorizontalAlignment="Left" x:Name="FontSizeComboBox">
+                                                        <ComboBoxItem Content="8"/>
+                                                        <ComboBoxItem Content="9"/>
+                                                        <ComboBoxItem Content="10"/>
+                                                        <ComboBoxItem Content="11"/>
+                                                        <ComboBoxItem Content="12"/>
+                                                        <ComboBoxItem Content="14"/>
+                                                        <ComboBoxItem Content="16"/>
+                                                        <ComboBoxItem Content="18"/>
+                                                        <ComboBoxItem Content="20"/>
+                                                        <ComboBoxItem Content="22"/>
+                                                        <ComboBoxItem Content="24"/>
+                                                        <ComboBoxItem Content="26"/>
+                                                        <ComboBoxItem Content="28"/>
+                                                        <ComboBoxItem Content="36"/>
+                                                        <ComboBoxItem Content="48"/>
+                                                        <ComboBoxItem Content="72"/>
+                                                    </ComboBox>
+                                                    <!-- ВЫРАВНИВАНИЕ -->
+                                                    <TextBlock Text="Выравнивание"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="250" HorizontalAlignment="Left" SelectedIndex="0" x:Name="E1AlignmentComboBox">
+                                                        <ComboBoxItem Content="По левому краю"/>
+                                                        <ComboBoxItem Content="По правому краю"/>
+                                                        <ComboBoxItem Content="По центру"/>
+                                                        <ComboBoxItem Content="По ширине"/>
+                                                    </ComboBox>
+                                                    <!-- ОТСТУП СЛЕВА -->
+                                                    <TextBlock Text="Отступ слева (в см)"/>
+                                                    <TextBox x:Name="E1MarginLeftTextBox"/>
+                                                    <!-- ОТСТУП СПРАВА -->
+                                                    <TextBlock Text="Отступ справа (в см)"/>
+                                                    <TextBox x:Name="E1MarginRightTextBox"/>
+                                                    <!-- ОТСТУП СВЕРХУ -->
+                                                    <TextBlock Text="Отступ сверху (в см)"/>
+                                                    <TextBox x:Name="E1MarginTopTextBox"/>
+                                                    <!-- ОТСТУП СНИЗУ -->
+                                                    <TextBlock Text="Отступ снизу (в см)"/>
+                                                    <TextBox x:Name="E1MarginBottomTextBox"/>
+                                                    <!-- ОТСТУП ПЕРВОЙ СТРОКИ -->
+                                                    <TextBlock Text="Отступ первой строки (в см)"/>
+                                                    <TextBox x:Name="E1FirstLineIndentationTextBox"/>
+                                                    <!-- МЕЖСТРОЧНЫЙ ИНТЕРВАЛ -->
+                                                    <TextBlock Text="Межстрочный интервал"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="E1LineSpacingComboBox_SelectionChanged"  Width="250" HorizontalAlignment="Left" x:Name="E1LineSpacingComboBox">
+                                                        <ComboBoxItem Content="Одинарный" Tag="1"/>
+                                                        <ComboBoxItem Content="Полуторный" Tag="1.5"/>
+                                                        <ComboBoxItem Content="Двойной" Tag="2"/>
+                                                        <ComboBoxItem Content="Множитель" Tag="multiply"/>
+                                                    </ComboBox>
+                                                    <!-- МНОЖИТЕЛЬ -->
+                                                    <StackPanel x:Name="E1LineSpacingMultiplierSl" Visibility="Collapsed">
+                                                        <TextBlock Text="Множитель (в pt)"/>
+                                                        <TextBox x:Name="E1LineSpacingMultiplierTextBox"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Expander>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- ПАНЕЛЬ СВОЙСТВ ДЛЯ ДАННЫХ -->
+                            <Border x:Name="DataPropertyPanel" Visibility="Collapsed" CornerRadius="0,0,10,10" Background="#343434">
+                                <StackPanel>
+                                    <StackPanel Margin="10,10,10,50">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                                <Setter Property="FontSize" Value="14"/>
+                                                <Setter Property="Background" Value="#595959"/>
+                                                <Setter Property="BorderBrush" Value="#303030"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Padding" Value="5"/>
+                                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                <Setter Property="Width" Value="250"/>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <TextBlock HorizontalAlignment="Left" Text="Абзац с данными" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,10" />
+
+                                        <StackPanel Margin="10">
+                                            <StackPanel.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                    <Setter Property="Margin" Value="10"/>
+                                                    <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                                    <Setter Property="FontSize" Value="14"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Style>
+                                            </StackPanel.Resources>
+                                            <Expander ScrollViewer.CanContentScroll="True" Header="Данные" FontSize="14" IsExpanded="True" Foreground="White">
+                                                <StackPanel Margin="0,10,0,0">
+                                                    <TextBlock Text="Имя"/>
+                                                    <TextBox x:Name="E2NameTextBox"/>
+                                                    <Expander Header="Текст" Margin="0,10,0,10" FontSize="14" IsExpanded="True" Foreground="White">
+                                                        <StackPanel Margin="0,10,0,0">
+                                                            <TextBlock Text="Позиция заполнения" Margin="10,5,0,5" Foreground="LightGray"/>
+                                                            <ComboBox x:Name="ContentPlace" Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="ContentPlace_SelectionChanged" Width="250" HorizontalAlignment="Left" SelectedIndex="1">
+                                                                <ComboBoxItem Content="До основного текста"/>
+                                                                <ComboBoxItem Content="После основного текста"/>
+                                                                <ComboBoxItem Content="Внутри текста"/>
+                                                                <ComboBoxItem Content="Без основного текста"/>
+                                                            </ComboBox>
+                                                            <StackPanel x:Name="IfDataBefore" Visibility="Collapsed">
+                                                                <TextBlock Text="Основной текст" Foreground="LightGray"/>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBox TextWrapping="Wrap" x:Name="TextBeforeData"/>
+                                                                    <TextBlock Text="данные" Foreground="LightGray" FontStyle="Italic" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                            <StackPanel x:Name="IfContentBefore" Visibility="Collapsed">
+                                                                <TextBlock Text="Основной текст" Foreground="LightGray"/>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="Данные" Foreground="LightGray" FontStyle="Italic" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                                                    <TextBox TextWrapping="Wrap" x:Name="TextAfterData"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                            <StackPanel x:Name="IfInsideContent" Visibility="Collapsed">
+                                                                <TextBlock Text="Текст до" Foreground="LightGray"/>
+                                                                <TextBox x:Name="TextBefore"/>
+                                                                <TextBlock Text="данные" Foreground="LightGray" FontStyle="Italic" Margin="5"/>
+                                                                <TextBlock Text="Текст после"  Foreground="LightGray"/>
+                                                                <TextBox x:Name="TextAfter"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Expander>
+                                                    <TextBlock Text="Тип данных"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="ContentType_SelectionChanged" x:Name="ContentType" Width="250" HorizontalAlignment="Left" SelectedIndex="0">
+                                                        <ComboBoxItem Content="Число"/>
+                                                        <ComboBoxItem Content="Текст"/>
+                                                        <ComboBoxItem Content="Выбирать значение"/>
+                                                    </ComboBox>
+                                                    <StackPanel x:Name="AddEnumsSl" Visibility="Collapsed">
+                                                        <TextBlock Text="Значения" VerticalAlignment="Center"/>
+                                                        <TextBox x:Name="E3EnumText"/>
+                                                        <Button HorizontalAlignment="Left" Margin="10" Content="Добавить значение" Foreground="White" Background="Transparent" BorderBrush="#9a00bc" Padding="3" VerticalAlignment="Center" FontSize="14" Name="AddEnumsButton" Click="AddEnumsButton_Click"/>
+                                                        <TextBlock Text="Выбранные значения:" Foreground="LightGray"/>
+                                                        <ListView Width="240" SelectionChanged="EnumsValuesListView_SelectionChanged"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" x:Name="EnumsValuesListView" Background="Transparent" BorderThickness="0">
+                                                            <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border BorderBrush="#9a00bc" CornerRadius="5" BorderThickness="1" Padding="5">
+                                                                        <Grid Width="200">
+                                                                            <TextBlock Text="{Binding OneValue}" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="14" HorizontalAlignment="Left" Foreground="White"/>
+                                                                            <TextBlock Text="  х" FontSize="14" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ListView.ItemTemplate>
+                                                        </ListView>
+                                                        <TextBlock x:Name="ValuesAreEmptyTextBlock" Margin="10,0,10,10" Text="Не выбраны" Visibility="Visible" Foreground="DarkRed"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander ScrollViewer.CanContentScroll="True" Focusable="False" Header="Текст" Margin="0,20,0,0" FontSize="14" IsExpanded="True" Foreground="White">
+                                                <StackPanel>
+                                                    <!-- ШРИФТ -->
+                                                    <TextBlock Text="Шрифт"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="250" HorizontalAlignment="Left" x:Name="E3FontFamilyComboBox" SelectedIndex="0">
+                                                        <ComboBoxItem Content="Times New Roman"/>
+                                                        <ComboBoxItem Content="Arial"/>
+                                                        <ComboBoxItem Content="Calibri"/>
+                                                    </ComboBox>
+                                                    <!-- РАЗМЕР ШРИФТА -->
+                                                    <TextBlock Text="Размер шрифта (в пт)"/>
+                                                    <ComboBox SelectedIndex="5" Style="{StaticResource CustomComboBoxStyle}"  Width="250" HorizontalAlignment="Left" x:Name="E3FontSizeComboBox">
+                                                        <ComboBoxItem Content="8"/>
+                                                        <ComboBoxItem Content="9"/>
+                                                        <ComboBoxItem Content="10"/>
+                                                        <ComboBoxItem Content="11"/>
+                                                        <ComboBoxItem Content="12"/>
+                                                        <ComboBoxItem Content="14"/>
+                                                        <ComboBoxItem Content="16"/>
+                                                        <ComboBoxItem Content="18"/>
+                                                        <ComboBoxItem Content="20"/>
+                                                        <ComboBoxItem Content="22"/>
+                                                        <ComboBoxItem Content="24"/>
+                                                        <ComboBoxItem Content="26"/>
+                                                        <ComboBoxItem Content="28"/>
+                                                        <ComboBoxItem Content="36"/>
+                                                        <ComboBoxItem Content="48"/>
+                                                        <ComboBoxItem Content="72"/>
+                                                    </ComboBox>
+                                                    <!-- ВЫРАВНИВАНИЕ -->
+                                                    <TextBlock Text="Выравнивание"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="250" HorizontalAlignment="Left" SelectedIndex="0" x:Name="E3AlignmentComboBox">
+                                                        <ComboBoxItem Content="По левому краю"/>
+                                                        <ComboBoxItem Content="По правому краю"/>
+                                                        <ComboBoxItem Content="По центру"/>
+                                                        <ComboBoxItem Content="По ширине"/>
+                                                    </ComboBox>
+                                                    <!-- ОТСТУП СЛЕВА -->
+                                                    <TextBlock Text="Отступ слева (в см)"/>
+                                                    <TextBox x:Name="E3MarginLeftTextBox"/>
+                                                    <!-- ОТСТУП СПРАВА -->
+                                                    <TextBlock Text="Отступ справа (в см)"/>
+                                                    <TextBox x:Name="E3MarginRightTextBox"/>
+                                                    <!-- ОТСТУП СВЕРХУ -->
+                                                    <TextBlock Text="Отступ сверху (в см)"/>
+                                                    <TextBox x:Name="E3MarginTopTextBox"/>
+                                                    <!-- ОТСТУП СНИЗУ -->
+                                                    <TextBlock Text="Отступ снизу (в см)"/>
+                                                    <TextBox x:Name="E3MarginBottomTextBox"/>
+                                                    <!-- ОТСТУП ПЕРВОЙ СТРОКИ -->
+                                                    <TextBlock Text="Отступ первой строки (в см)"/>
+                                                    <TextBox x:Name="E3FirstLineIndentationTextBox"/>
+                                                    <!-- МЕЖСТРОЧНЫЙ ИНТЕРВАЛ -->
+                                                    <TextBlock Text="Межстрочный интервал"/>
+                                                    <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="E3LineSpacingComboBox_SelectionChanged"  Width="250" HorizontalAlignment="Left" x:Name="E3LineSpacingComboBox">
+                                                        <ComboBoxItem Content="Одинарный" Tag="1"/>
+                                                        <ComboBoxItem Content="Полуторный" Tag="1.5"/>
+                                                        <ComboBoxItem Content="Двойной" Tag="2"/>
+                                                        <ComboBoxItem Content="Множитель" Tag="multiply"/>
+                                                    </ComboBox>
+                                                    <!-- МНОЖИТЕЛЬ -->
+                                                    <StackPanel x:Name="E3LineSpacingMultiplierSl" Visibility="Collapsed">
+                                                        <TextBlock Text="Множитель (в pt)"/>
+                                                        <TextBox x:Name="E3LineSpacingMultiplierTextBox"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Expander>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <!-- ПАНЕЛЬ СВОЙСТВ ДЛЯ РАЗДЕЛИТЕЛЬНОЙ ПОЛОСЫ -->
+                            <Border x:Name="SeparatorPropertyPanel" Visibility="Collapsed" CornerRadius="0,0,10,10" Background="#343434">
+                                <Grid>
+                                    <StackPanel Margin="10">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                                <Setter Property="FontSize" Value="14"/>
+                                                <Setter Property="Background" Value="#595959"/>
+                                                <Setter Property="BorderBrush" Value="#303030"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Padding" Value="5"/>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <TextBlock HorizontalAlignment="Left" Text="Разделительная полоса" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,10" />
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                            <StackPanel Margin="10">
+                                                <StackPanel.Resources>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                                        <Setter Property="Margin" Value="10"/>
+                                                        <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                                                        <Setter Property="FontSize" Value="14"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </Style>
+                                                </StackPanel.Resources>
+                                                <TextBlock Text="Тип"/>
+                                                <ComboBox x:Name="SeparatorLineTypeComboBox" SelectedIndex="0" Width="250" HorizontalAlignment="Left">
+                                                    <ComboBoxItem Content="Сплошная">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <Border Width="30" Height="30" Margin="4" BorderThickness="1" BorderBrush="Black" Background="White">
+                                                                            <Rectangle Fill="Black" Width="20" Height="2" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <TextBlock Text="Сплошная" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem Content="Двойная">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <Border Width="30" Height="30" Margin="4" BorderThickness="1" BorderBrush="Black" Background="White">
+                                                                            <StackPanel VerticalAlignment="Center">
+                                                                                <Rectangle Fill="Black" Width="20" Height="2" Margin="0,0,0,2"/>
+                                                                                <Rectangle Fill="Black" Width="20" Height="2"/>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                        <TextBlock Text="Двойная" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem Content="Полужирная">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <Border Width="30" Height="30" Margin="4" BorderThickness="1" BorderBrush="Black" Background="White">
+                                                                            <Rectangle Fill="Black" Width="20" Height="5" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <TextBlock Text="Полужирная" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem Content="Штрих">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <Border Width="30" Height="30" Margin="4" BorderThickness="1" BorderBrush="Black" Background="White">
+                                                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                                                                                <Rectangle Fill="Black" Width="6" Height="4" Margin="0,0,2,0"/>
+                                                                                <Rectangle Fill="Black" Width="6" Height="4" Margin="0,0,2,0"/>
+                                                                                <Rectangle Fill="Black" Width="6" Height="4"/>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                        <TextBlock Text="Штрих" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem Content="Волнистая">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <Border Width="30" Height="30" Margin="4" BorderThickness="1" BorderBrush="Black" Background="White">
+                                                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                                                                                <TextBlock Text="~~~" FontWeight="ExtraBold" FontSize="16"/>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                        <TextBlock Text="Волнистая" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                </ComboBox>
+                                                <TextBlock Text="Цвет"/>
+                                                <ComboBox x:Name="SeparatorColorComboBox" SelectedIndex="0" Width="250" HorizontalAlignment="Left">
+                                                    <ComboBoxItem Content="Черный">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                                        <Rectangle Width="20" Height="20" Fill="Black"/>
+                                                                        <TextBlock Text="Черный" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem Content="Красный">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                                        <Rectangle Width="20" Height="20" Fill="Red"/>
+                                                                        <TextBlock Text="Красный" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem Content="Зеленый">
+                                                        <ComboBoxItem.ContentTemplate>
+                                                            <ItemContainerTemplate>
+                                                                <Grid Background="#595959" Width="500">
+                                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                                        <Rectangle Width="20" Height="20" Fill="Green"/>
+                                                                        <TextBlock Text="Зеленый" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </ItemContainerTemplate>
+                                                        </ComboBoxItem.ContentTemplate>
+                                                    </ComboBoxItem>
+                                                </ComboBox>
+                                                <TextBlock Text="Толщина (в pt)"/>
+                                                <ComboBox x:Name="SeparatorLineHeightComboBox" Style="{StaticResource CustomComboBoxStyle}" SelectedIndex="0">
+                                                    <ComboBoxItem Content="1"/>
+                                                    <ComboBoxItem Content="2"/>
+                                                    <ComboBoxItem Content="3"/>
+                                                    <ComboBoxItem Content="4"/>
+                                                    <ComboBoxItem Content="5"/>
+                                                </ComboBox>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ScrollViewer>
+
+                </DockPanel>
             </Grid>
+            <cl:ErrorContainerOnMainScr x:Name="ErrorContainer"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       Margin="20"/>
         </Grid>
+        <!--
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ" TextWrapping="Wrap" Foreground="White"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="Федеральное государственное бюджетное образовательное учреждение высшего образования"  TextWrapping="Wrap" Foreground="White"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="«Казанский национальный исследовательский технический университет им. А.Н. Туполева – КАИ»
+"  TextWrapping="Wrap" Foreground="White"/>
+            </StackPanel>
+        </Border>
+
+        <Border Background="#252525" CornerRadius="10" Margin="10">
+            <TextBlock Text="Разделительная полоса" Foreground="White" TextAlignment="Center"/>
+        </Border>
+
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац"  TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="[" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Номер лабоработной работы" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="] " TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="ЛАБОРАБОРНАЯ РАБОТА №" TextWrapping="Wrap" Foreground="White"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text=": " TextWrapping="Wrap" Foreground="White"/>
+                    
+                    <TextBlock VerticalAlignment="Center" Text="заполняется" FontSize="16" TextWrapping="Wrap" Foreground="Black" Padding="3" Background="LightGray"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="по дисциплине:" TextWrapping="Wrap" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="[" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Дисциплина" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="] " TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock VerticalAlignment="Center" Text="заполняется" FontSize="16" TextWrapping="Wrap" Foreground="Black" Padding="3" Background="LightGray"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац"  TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+
+
+
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="Работу выполнил:" TextWrapping="Wrap" Foreground="White"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="[" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Группа" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="] " TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Студент гр. " TextWrapping="Wrap" Foreground="White"/>
+                    <TextBlock VerticalAlignment="Center" Text="заполняется" FontSize="16" TextWrapping="Wrap" Foreground="Black" Padding="3" Background="LightGray"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="[" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Фамилия, инициалы студента" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="] " TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock VerticalAlignment="Center" Text="заполняется" FontSize="16" TextWrapping="Wrap" Foreground="Black" Padding="3" Background="LightGray"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="Проверил:" TextWrapping="Wrap" Foreground="White"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="[" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Должность преподавателя" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="] " TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock VerticalAlignment="Center" Text="заполняется" FontSize="16" TextWrapping="Wrap" Foreground="Black" Padding="3" Background="LightGray"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="[" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="Фамилия, инициалы проверяющего" TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="] " TextWrapping="Wrap" Foreground="#F2009A"/>
+                    <TextBlock VerticalAlignment="Center" Text="заполняется" FontSize="16" TextWrapping="Wrap" Foreground="Black" Padding="3" Background="LightGray"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+
+
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац" TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац"  TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+        <Border Background="#404040" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="пустой абзац"  TextAlignment="Center" TextWrapping="Wrap" Foreground="Gray"/>
+            </StackPanel>
+        </Border>
+
+
+        <Border Background="#595959" CornerRadius="10" Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="16" Text="Казань 2025" TextWrapping="Wrap" Foreground="White"/>
+            </StackPanel>
+        </Border>-->
     </Grid>
 </Window>
+
+
+
+
+
+
+

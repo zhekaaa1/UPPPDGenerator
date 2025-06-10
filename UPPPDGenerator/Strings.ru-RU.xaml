@@ -6,6 +6,7 @@
     <sys:String x:Key="mw/greeting">Добро пожаловать!</sys:String>
     <sys:String x:Key="mw/whatis">UPPPD Generator — программа для автоматизированной генерации отчетов. Создавайте шаблоны документов и не тратьте время на его оформление при заполнении!</sys:String>
     <sys:String x:Key="mw/login">Войти</sys:String>
+    <sys:String x:Key="mw/asguest">Пропустить вход</sys:String>
     <sys:String x:Key="mw/reg">Зарегистрироваться</sys:String>
     <sys:String x:Key="mw/back">Назад</sys:String>
 
@@ -17,16 +18,18 @@
     <sys:String x:Key="errs/confirm/wrongcode">* Код неверен.</sys:String>
 
     <!-- Авторизация -->
-    <sys:String x:Key="mw/email">Адрес электронной почты:</sys:String>
-    <sys:String x:Key="mw/pass">Пароль:</sys:String>
+    <sys:String x:Key="mw/email">Адрес электронной почты</sys:String>
+    <sys:String x:Key="mw/pass">Пароль</sys:String>
     <sys:String x:Key="mw/reg/nhaveacc">Нет аккаунта?</sys:String>
 
     <!-- регистрация -->
     <sys:String x:Key="mw/reg/haveacc">Есть аккаунт?</sys:String>
-    <sys:String x:Key="mw/reg/f">Фамилия:</sys:String>
-    <sys:String x:Key="mw/reg/i">Имя:</sys:String>
-    <sys:String x:Key="mw/reg/o">Отчество (при наличии):</sys:String>
-    <sys:String x:Key="mw/reg/rpass">Повторите пароль:</sys:String>
+    <sys:String x:Key="mw/reg/f">Фамилия</sys:String>
+    <sys:String x:Key="mw/reg/i">Имя</sys:String>
+    <sys:String x:Key="mw/reg/o">Отчество</sys:String>
+    
+    <sys:String x:Key="mw/reg/pass">Придумайте пароль</sys:String>
+    <sys:String x:Key="mw/reg/rpass">Повторите пароль</sys:String>
     <sys:String x:Key="mw/reg/pass/containssmallletter">Содержит строчную букву</sys:String>
     <sys:String x:Key="mw/reg/pass/containslargeletter">Содержит заглавную букву</sys:String>
     <sys:String x:Key="mw/reg/pass/containsspecsymbol">Содержит специальный символ: !, №, #, $, % и др.</sys:String>

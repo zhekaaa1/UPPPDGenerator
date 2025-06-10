@@ -4,12 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UPPPDGenerator.Windows"
-        mc:Ignorable="d"
+        mc:Ignorable="d"        
         xmlns:cl="clr-namespace:UPPPDGenerator.Windows.Elements"
         Title="MainWin" Height="1000" Width="1900" Background="#222222" WindowState="Maximized">
+    <Window.Resources>
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                 From="0" To="1"
+                 Duration="0:0:0.2"
+                 BeginTime="0:0:0.2" />
+        </Storyboard>
+        <Storyboard x:Key="FadeOutAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                 To="0"
+                 Duration="0:0:0.2"
+                 BeginTime="0:0:0.2" />
+        </Storyboard>
+    </Window.Resources>
     <Grid>
+        <cl:BackgroundOnAllScr/>
         <Grid VerticalAlignment="Top" Background="#343434" Height="50">
-            <Image Source="{StaticResource icon}" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+            <Image Source="/resources/imgs/icon.png" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
             <TextBlock Text="{DynamicResource m/title}" FontSize="25" VerticalAlignment="Center" Margin="100,0,0,0" Foreground="White"/>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
                 <StackPanel.Resources>
@@ -28,60 +43,45 @@
                 <cl:ButtonOnMainScr x:Name="n2" Margin="0,0,0,10" IconSource="/resources/imgs/pen-fill.png" ButtonText="{DynamicResource m/2}" Tag="b2"/>
                 <cl:ButtonOnMainScr x:Name="n3" Margin="0,0,0,10" IconSource="/resources/imgs/file-alt1.png" ButtonText="{DynamicResource m/3}" Tag="b3"/>
                 <cl:ButtonOnMainScr x:Name="n4" Margin="0,0,0,10" IconSource="/resources/imgs/gear-fill.png" ButtonText="{DynamicResource m/4}" Tag="b4"/>
-                <cl:ButtonOnMainScr x:Name="n5" IconSource="/resources/imgs/box-arrow-right.png" ButtonText="{DynamicResource m/5}" Tag="b5"/>
+                <cl:ButtonOnMainScr x:Name="n5" Margin="0,0,0,10" IconSource="/resources/imgs/box-arrow-right.png" ButtonText="{DynamicResource m/5}" Tag="b5"/>
+                <cl:ButtonOnMainScr x:Name="n6" IconSource="/resources/imgs/box-arrow-right.png" ButtonText="Войти" Tag="b6"/>
             </StackPanel>
         </Grid>
 
 
         <!-- СОЗДАТЬ НОВЫЙ ШАБЛОН -->
-        <Border x:Name="createb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
-
+        <Border x:Name="createb" Visibility="Collapsed" Background="#222222" CornerRadius="5" Margin="520,150,100,150">
             <Grid>
-                <ScrollViewer Margin="50,50,50,120" VerticalScrollBarVisibility="Auto">
-                    
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                </Grid.Resources>
+                <Border Padding="20" CornerRadius="5,5,0,0" Background="#383838" VerticalAlignment="Top">
+                    <TextBlock Text="{DynamicResource m/1/title}" Margin="30,0,0,0" FontWeight="Bold" FontSize="25" />
+                </Border>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="50,70,0,0">
                     <StackPanel>
-                        <StackPanel.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="FontFamily" Value="{StaticResource Comfortaa}"/>
-                                <Setter Property="Foreground" Value="White"/>
-                            </Style>
-                        </StackPanel.Resources>
-                        <TextBlock Text="{DynamicResource m/1/title}" FontWeight="Bold" FontSize="25"/>
                         <TextBlock Text="{DynamicResource m/1/name}" FontSize="18" Margin="0,20,0,10"/>
-                        <TextBox AcceptsTab="False" MaxLength="220" FontFamily="{StaticResource Comfortaa}" TextChanged="templateName_TextChanged" x:Name="templateName" TextWrapping="Wrap" Foreground="White" Background="#595959" Padding="5" FontSize="14"/>
-                        <TextBlock x:Name="errorname" Text="* Нежелательно использовать этот символ." Opacity="0" Margin="0,5,0,0" Foreground="Red">
-                            <TextBlock.Triggers>
-                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                    <BeginStoryboard x:Name="ErrorAnimationStoryboard">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="errorname"
-                                     Storyboard.TargetProperty="Opacity"
-                                     From="0" To="1" Duration="0:0:0.5" AutoReverse="True"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </TextBlock.Triggers>
-                        </TextBlock>
-                        <TextBlock Text="Дайте описание шаблону (если не заполните, ничего страшного)" Opacity="1" Foreground="White" FontSize="18" Margin="0,20,0,10"/>
-                        <TextBox TextWrapping="Wrap" TextChanged="templateName_TextChanged" AcceptsTab="False" MaxLength="500" MinHeight="50" FontFamily="{StaticResource Comfortaa}" x:Name="description" Background="#595959" Padding="5" FontSize="14" Foreground="White"/>
-
-
-                        <TextBlock x:Name="errorname1" Text="* Нежелательно использовать этот символ." Opacity="0" Margin="0,5,0,0" Foreground="Red">
-                            <TextBlock.Triggers>
-                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                    <BeginStoryboard x:Name="ErrorAnimationStoryboard1">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="errorname"
-             Storyboard.TargetProperty="Opacity"
-             From="0" To="1" Duration="0:0:0.5" AutoReverse="True"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </TextBlock.Triggers>
-                        </TextBlock>
-
+                        <cl:FieldOnMainScr x:Name="templateName" FieldPlaceholder="Введите название..."/>
+                        <TextBlock Text="Дайте описание шаблону (необязательно):" FontSize="18" Margin="0,20,0,10"/>
+                        <cl:FieldOnMainScr x:Name="description" FieldPlaceholder="Введите описание..."/>
+                        <TextBlock Text="Режим доступа" FontSize="18" Margin="0,20,0,10"/>
+                        <TextBlock><Hyperlink Foreground="#B2009A">О режимах доступа...</Hyperlink></TextBlock>
+                        <ComboBox x:Name="TemplateAccessMode" Style="{StaticResource CustomComboBoxStyle}" FontSize="16" HorizontalAlignment="Left" Width="200" Margin="0,10,0,0" SelectedIndex="0"/>
 
                         <CheckBox Background="#595959" Margin="0,20,0,10"
+          x:Name="useTitlePage"
+          BorderBrush="Transparent"
+          VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+          Checked="useTitlePage_Checked"
+          Unchecked="useTitlePage_Unchecked">
+                            <TextBlock Text="Документ должен содержать титульный лист" FontSize="18"/>
+                        </CheckBox>
+
+                        <CheckBox Background="#595959" Margin="0,20,0,10"
+                                  Visibility="Collapsed"
                                   x:Name="useExternalTitle"
                                   BorderBrush="Transparent"
                                   VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
@@ -89,16 +89,16 @@
                                   Unchecked="useExternalTitle_Unchecked">
                             <TextBlock Text="{DynamicResource m/1/useExternalTitle}" FontSize="18"/>
                         </CheckBox>
-                        <StackPanel Opacity="0" Visibility="Collapsed" x:Name="openFileWithTitle">
+                        <StackPanel Visibility="Collapsed" x:Name="openFileWithTitle">
                             <TextBlock Text="Открыть документ" FontSize="16"  Margin="0,20,0,10"/>
                             <TextBlock><Hyperlink Foreground="#B2009A">Подробности об использовании титульного листа...</Hyperlink></TextBlock>
                             <Button Content="Выбрать файл..." Click="selectFile_Click" x:Name="selectFile" HorizontalAlignment="Left" Background="Transparent" Foreground="White" BorderBrush="#B2009A" Margin="10" Padding="5"/>
-                            <StackPanel x:Name="selected" Opacity="0" Visibility="Collapsed">
+                            <StackPanel x:Name="selected" Visibility="Collapsed">
                                 <TextBlock Text="Выбранный файл" FontSize="16" Margin="0,10,0,0"/>
                                 <TextBlock x:Name="selectedFileName" Text="document.docx" Foreground="LightGray" Margin="0,10,0,0"/>
                             </StackPanel>
                         </StackPanel>
-
+                        
                         <CheckBox Background="#595959" Margin="0,20,0,10"
                                   x:Name="defence"
                                   BorderBrush="Transparent"
@@ -108,15 +108,14 @@
                             <TextBlock Text="{DynamicResource m/1/makepass}" FontSize="18"/>
                         </CheckBox>
 
-                        <StackPanel Opacity="0" x:Name="passfortemplate">
+                        <StackPanel Visibility="Collapsed" x:Name="passfortemplate">
                             <TextBlock Text="{DynamicResource m/1/writepass}" FontSize="16"  Margin="0,20,0,10"/>
-
-                            <TextBox x:Name="password" FontFamily="{StaticResource Comfortaa}"  TextWrapping="Wrap" Foreground="White" Background="#595959" Padding="5" FontSize="14"/>
+                            <cl:PasswordBoxOnMainScr PasswordPlaceholder="Пароль шаблона..." x:Name="passwordInTemplate"/>
                         </StackPanel>
 
                     </StackPanel>
                 </ScrollViewer>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,50,50">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,50,20">
                     <StackPanel.Resources>
                         <Style TargetType="Button">
                             <Setter Property="Foreground" Value="White"/>
@@ -134,35 +133,73 @@
         
 
         <!-- заполнить документ по шаблону -->
-        <Border x:Name="fillb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
+        <Border x:Name="fillb" Visibility="Collapsed" Background="#222222" CornerRadius="5" Margin="520,150,100,150">
             <Grid>
-                <Grid VerticalAlignment="Top" Height="50" Margin="50,0,50,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="10*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="По названию " Foreground="White" FontWeight="Thin"/>
-                        <TextBlock Text="(A-Z) ↑" Visibility="Visible" Opacity="1" Foreground="White" FontWeight="Thin"/>
-                        <TextBlock Text="(Z-A) ↓" Visibility="Collapsed" Opacity="0" Foreground="White" FontWeight="Thin"/>
-                    </StackPanel>
-                </Grid>
-                <ScrollViewer Margin="50" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="chooseTemplates">
-                        
+                <Border Padding="20" CornerRadius="5,5,0,0" Background="#383838" VerticalAlignment="Top">
+                    <TextBlock Text="Заполнить документ по шаблону" Foreground="White" Margin="30,0,0,0" FontWeight="Bold" FontSize="25" />
+                </Border>
+                <Button Margin="50,90,0,0" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="По названию" Foreground="White" FontWeight="Thin" FontSize="16"/>
+                                        <TextBlock Text=" (A-Z) ↑" Visibility="Visible" Opacity="1" Foreground="White" FontSize="16" FontWeight="Thin"/>
+                                        <TextBlock Text=" (Z-A) ↓" Visibility="Collapsed" Opacity="0" Foreground="White"  FontSize="16" FontWeight="Thin"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
+                        </Button>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="50,130,0,0">
+                    <StackPanel Grid.Column="1">
+                        <ListView BorderThickness="0" ScrollViewer.CanContentScroll="True" Background="#222222" HorizontalContentAlignment="Stretch" x:Name="TemplatesListView" MouseDoubleClick="TemplatesListView_MouseDoubleClick">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Gray" BorderThickness="0,0,0,1">
+                                        <Grid Tag="{Binding FilePath}" Margin="10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="5*"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding TemplateName}" 
+                                                       FontSize="16" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="White" 
+                                                       FontFamily="Comfortaa"/>
+                                                <TextBlock Text="{Binding AuthorName}" 
+                                                       FontSize="14" 
+                                                       Foreground="LightGray" 
+                                                       FontFamily="Comfortaa"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Text="{Binding CreatedAtFormatted}" 
+                                                          VerticalAlignment="Center" FontSize="14" 
+                                                           Foreground="LightGray" 
+                                                           FontFamily="Comfortaa"/>
+                                            <StackPanel Grid.Column="2">
+                                                <Button
+                                                        Width="30" Height="30"
+                                                        Style="{StaticResource threeDots}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Свойства" Name="TemplateProperties" Click="TemplateProperties_Click"/>
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                        </ListView>
                     </StackPanel>
                 </ScrollViewer>
-                <TextBlock VerticalAlignment="Center" Foreground="Yellow" HorizontalAlignment="Center" Text="⚠️Внимание! Окно в разработке, может работать неправильно.⚠️"/>
             </Grid>
         </Border>
 
 
-        <Border x:Name="mytemplatesb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
+        <Border x:Name="mytemplatesb" Visibility="Collapsed" Background="#222222" CornerRadius="5" Margin="520,150,100,150">
             <Grid>
-
                 <StackPanel Margin="50">
-
                     <Grid VerticalAlignment="Top" Margin="0,0,0,20">
                         <Grid.Resources>
                             <Style TargetType="TextBlock">
@@ -343,11 +380,10 @@
                         </Button>
                     </Grid>
                 </StackPanel>
-                <TextBlock VerticalAlignment="Center" Foreground="Yellow" HorizontalAlignment="Center" Text="⚠️Внимание! Окно в разработке, может работать неправильно.⚠️"/>
             </Grid>
         </Border>
-        
-        <Border x:Name="settingsb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
+
+        <Border x:Name="settingsb" Visibility="Collapsed" Background="#222222" CornerRadius="5" Margin="520,150,100,150">
             <StackPanel Margin="50">
                 <TextBlock Text="Настройки" FontSize="20" Foreground="White" FontWeight="Bold" Margin="10"/>
                 <TextBlock Text="Язык" FontSize="17" Foreground="White"/>
@@ -356,10 +392,23 @@
                     <ComboBoxItem Content="English (USA)"/>
                 </ComboBox>
                 <TextBlock VerticalAlignment="Center" Foreground="Yellow" x:Name="warningLabel" Opacity="0" Visibility="Collapsed" HorizontalAlignment="Left" Text="⚠️Attention! The translation into English (USA) is less than 15% complete. Stay tuned for updates!⚠️"/>
+                <StackPanel x:Name="ForDevelopersStackPanel" Visibility="Collapsed">
+                    <TextBlock Text="Разработчикам" FontSize="14" FontStyle="Italic" Margin="0,20,0,10" Foreground="White"/>
+                    <CheckBox Background="#595959" Name="SaveJson" Checked="SaveJson_Checked" Unchecked="SaveJson_Unchecked"
+    BorderBrush="Transparent" BorderThickness="0"
+    VerticalContentAlignment="Center" HorizontalContentAlignment="Left">
+                        <TextBlock Text="Сохранять JSON при создании шаблона" Foreground="White" FontSize="18"/>
+                    </CheckBox>
+                    <CheckBox Background="#595959" Name="OpenOnFinish" Checked="OpenOnFinish_Checked"  Unchecked="OpenOnFinish_Unchecked"
+    BorderBrush="Transparent" BorderThickness="0"
+    VerticalContentAlignment="Center" HorizontalContentAlignment="Left">
+                        <TextBlock Text="Открывать WORD по завершении заполнения документа" Foreground="White" FontSize="18"/>
+                    </CheckBox>
+                </StackPanel>
             </StackPanel>
         </Border>
-        
-        <Border x:Name="logoutb" Visibility="Collapsed" Background="#343434" CornerRadius="5" Margin="520,150,100,150">
+
+        <Border x:Name="logoutb" Visibility="Collapsed" Background="#222222" CornerRadius="5" Margin="520,150,100,150">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">
                 <TextBlock TextAlignment="Center" Text="Вы уверены, что желаете выйти из системы?" FontSize="20" Foreground="White" Margin="10"/>
                 <TextBlock TextAlignment="Center" TextWrapping="Wrap" FontSize="16" Foreground="LightGray" Margin="10">
@@ -380,6 +429,26 @@
                 </StackPanel>
             </StackPanel>
         </Border>
+        <Border x:Name="loginb" Visibility="Collapsed" Background="#222222" CornerRadius="5" Margin="520,150,100,150">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="50">
+                <TextBlock TextAlignment="Center" Text="Желаете войти в систему?" FontSize="20" Foreground="White" Margin="10"/>
+                <TextBlock TextAlignment="Center" TextWrapping="Wrap" FontSize="16" Foreground="LightGray" Margin="10">
+            Авторизованные пользователи имеют больше возможностей, скорее входите в систему! 
+            <Hyperlink Foreground="#B2009A">Подробнее...</Hyperlink>
+                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50,0,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Height" Value="50"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="200"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="Войти"  Background="#B2009A" Click="Button_Click_3" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
 
         <Grid VerticalAlignment="Bottom" Height="100" Background="#343434">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="100,0,0,0">
@@ -387,6 +456,25 @@
                 <TextBlock x:Name="logonUserName" Foreground="Gray" FontSize="16"/>
             </StackPanel>
         </Grid>
+        <CheckBox HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" BorderThickness="0"
+                  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+        <Grid Margin="0,50,0,0" Visibility="Collapsed" x:Name="TemplatePasswordSl">
+            <Rectangle Fill="Black" Opacity="0.5"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Background="#222222">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Введите пароль шаблона ниже." Foreground="White" FontFamily="{StaticResource Comfortaa}" FontSize="20"/>
+                    <cl:PasswordBoxOnMainScr PasswordPlaceholder="Пароль" x:Name="templatePass" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Отмена" Click="CancelPassButton_Click" Name="CancelPassButton" FontSize="14" Width="80" Background="Transparent" Foreground="White" BorderThickness="1" BorderBrush="#9a00bc" Padding="5" Margin="10"/>
+                        <Button Content="Далее" Click="ConfirmPassButton_Click" Name="ConfirmPassButton" FontSize="14" Width="80" Background="#9a00bc" BorderThickness="0" Foreground="White"  Padding="5" Margin="10"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <cl:ErrorContainerOnMainScr x:Name="ErrorContainer"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Bottom"
+                               Margin="20"/>
         
         
     </Grid>

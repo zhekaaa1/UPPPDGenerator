@@ -1,56 +1,55 @@
-﻿using System;
-using x2 = DocumentFormat.OpenXml.Packaging;
-using System.Text.Json;
-using System.IO;
+﻿using System.Windows;
 using UPPPDGenerator.DocumentSettings;
-using System.Windows;
-
+using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
 namespace UPPPDGenerator.Managers
 {
     public class TemplateGENERATOR
     {
-        public static async void BeginWithoutTitle(string titleListPath, DocumentSettings.Settings documentSettings)
+        public static async Task GenerateTemplate 
+            (TemplateJsonStructure template,
+            TemplateAccessMode templateAccessMode)
         {
-            string docxPath = titleListPath;
-            string jsonPath = $"C:\\Templates\\{PreparingTemplate.Name}.json";
 
-            // Извлекаем OpenXML
-            string openXml = GetOpenXmlFromDocx(docxPath);
-            if (PreparingTemplate.PasswordHash != "ns")
+            //в Properties пока что значение "C:\\Templates\\"
+            string safeTemplateName = string.Concat(template.TemplateName.Split(Path.GetInvalidFileNameChars()));
+            string fileTargetPath = Path.Combine(Properties.Settings.Default.TemplatesDirectory, safeTemplateName + ".ugt");
+
+            string safeTemplateName1 = string.Concat(template.TemplateName.Split(Path.GetInvalidFileNameChars()));
+            string fileTargetPath1 = Path.Combine(Properties.Settings.Default.TemplatesDirectory, safeTemplateName1 + ".json");
+
+            switch (templateAccessMode)
             {
-                Console.WriteLine("пришло НЕ NS");
-                PasswordManager passwordManager = new PasswordManager();
-                PreparingTemplate.PasswordHash = passwordManager.ComputeSHA256Hash(PreparingTemplate.PasswordHash);
+                case TemplateAccessMode.Private:
+                    template.TemplateIdFromDatabase = -1;
+                    break;
+                case TemplateAccessMode.Public:
+                    template.TemplateIdFromDatabase = 0;
+                    break;
+                default:
+                    template.TemplateIdFromDatabase = await GetTemplateIdFromCreated(template);
+                    break;
             }
-            // Создаем JSON-структуру
-            var template = new
+            new TemplateManager().EncryptData(template, fileTargetPath);
+            if (Properties.Settings.Default.SaveJson)
             {
-                TemplateName = PreparingTemplate.Name,
-                TemplatePasswordHash = PreparingTemplate.PasswordHash,
-                TemplateDescription = PreparingTemplate.Description,
-                CreatedAt = PreparingTemplate.Createdat,
-                CreatedBy = PreparingTemplate.CreatedByAuthorId,
-                UseTitlePage = true,
-                TitlePageXml = openXml,
-                DocumentSettings = PreparingTemplate.Settings,
-            };
-
+                string jsonContent = JsonSerializer.Serialize(template, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(fileTargetPath1, jsonContent);
+            }
+            MessageBox.Show("Готово! Данные сохранены в " + fileTargetPath);
+        }
+        public static async Task<int> GetTemplateIdFromCreated(TemplateJsonStructure templateJson)
+        {
             TemplateManager templateManager = new TemplateManager();
-            bool success = await templateManager.CreateTemplate(template.TemplateName, template.TemplateDescription, template.CreatedBy, template.TemplatePasswordHash);
-            if (success)
-            {
-                File.WriteAllText(jsonPath, JsonSerializer.Serialize(template, new JsonSerializerOptions { WriteIndented = true }));
-                MessageBox.Show("Готово! Данные сохранены в " + jsonPath);
-            }
-            // Сохраняем в JSON
-
+            Template created = await templateManager.AddTemplate(templateJson.TemplateName, templateJson.TemplateDescription, Properties.Settings.Default.LogonUserId);
+            return created.Id;
         }
-        public static string GetOpenXmlFromDocx(string docxPath)
-        {
-            using (x2.WordprocessingDocument doc = x2.WordprocessingDocument.Open(docxPath, false))
-            {
-                return doc.MainDocumentPart.Document.OuterXml; // Сырые данные OpenXML
-            }
-        }
+    }
+    public enum TemplateAccessMode
+    {
+        Private = -1,       
+        Public = 0,         
+        Restricted = 1      
     }
 }

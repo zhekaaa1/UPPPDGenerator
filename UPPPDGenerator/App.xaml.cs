@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using UPPPDGenerator.Managers;
@@ -16,28 +14,47 @@ namespace UPPPDGenerator
     /// </summary>
     public partial class App : Application
     {
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            Console.WriteLine($"ПОЛУЧЕНО ИЗ НАСТРОЕК: {Settings.Default.lang}");
-            Console.WriteLine($"ПОЛУЧЕНО ИЗ НАСТРОЕК --- ID ПОЛЬЗОВАТЕЛЯ: {Settings.Default.userid}");
             string lang = Settings.Default.lang;
             if (!string.IsNullOrEmpty(lang))
             {
                 LangManager.SetLanguage(lang);
             }
-            Window mainWindow;
-            if (Settings.Default.userid != 0)
+            if (e.Args.Length > 0)
             {
-                UserManager userManager = new UserManager();
-                await userManager.SetLogonUser(Settings.Default.userid);
-                mainWindow = new MainWin();
+                string filePath = e.Args[0];
+                if (File.Exists(filePath) && filePath.EndsWith(".ugt", StringComparison.OrdinalIgnoreCase))
+                {
+                    var template = new TemplateManager().DecryptData(filePath);
+                    if (template != null)
+                    {
+                        new FillOutTheDocument(template).Show();
+                        return;
+                    }
+                    else
+                    {
+                        MainWin win = new MainWin();
+                        win.Show();
+                        win.ErrorContainer.Show($"Произошла ошибка при открытии шаблона: Файл шаблона повреждён", UPPPDGenerator.Windows.Elements.ErrorType.Critical, 5000);
+                        return;
+                    }
+                }
             }
-            else
+            new MainWin().Show();
+        }
+        public static async Task<bool> IsServerAvailable()
+        {
+            try
             {
-                mainWindow = new MainWindow();
+                var pingResult = await new HttpClient().GetAsync("http://localhost:5121/api/templates");
+                return pingResult.IsSuccessStatusCode;
             }
-            mainWindow.Show();
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -5,8 +5,32 @@
     <Setting Name="lang" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="userid" Type="System.Int32" Scope="User">
+    <Setting Name="LogonUserId" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LogonUserFullName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LogonUserCreatedAt" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TemplatesDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\\Templates\\</Value>
+    </Setting>
+    <Setting Name="AesIV" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ThisIsAnInitVect</Value>
+    </Setting>
+    <Setting Name="AesKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ThisIsASecretKey1234567890123456</Value>
+    </Setting>
+    <Setting Name="SaveJson" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DocumentEditorDarkTheme" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="StartMsOfficeOnFinish" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

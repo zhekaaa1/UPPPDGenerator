@@ -38,12 +38,107 @@ namespace UPPPDGenerator.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int userid {
+        public int LogonUserId {
             get {
-                return ((int)(this["userid"]));
+                return ((int)(this["LogonUserId"]));
             }
             set {
-                this["userid"] = value;
+                this["LogonUserId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogonUserFullName {
+            get {
+                return ((string)(this["LogonUserFullName"]));
+            }
+            set {
+                this["LogonUserFullName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime LogonUserCreatedAt {
+            get {
+                return ((global::System.DateTime)(this["LogonUserCreatedAt"]));
+            }
+            set {
+                this["LogonUserCreatedAt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\Templates\\\\")]
+        public string TemplatesDirectory {
+            get {
+                return ((string)(this["TemplatesDirectory"]));
+            }
+            set {
+                this["TemplatesDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ThisIsAnInitVect")]
+        public string AesIV {
+            get {
+                return ((string)(this["AesIV"]));
+            }
+            set {
+                this["AesIV"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ThisIsASecretKey1234567890123456")]
+        public string AesKey {
+            get {
+                return ((string)(this["AesKey"]));
+            }
+            set {
+                this["AesKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveJson {
+            get {
+                return ((bool)(this["SaveJson"]));
+            }
+            set {
+                this["SaveJson"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DocumentEditorDarkTheme {
+            get {
+                return ((bool)(this["DocumentEditorDarkTheme"]));
+            }
+            set {
+                this["DocumentEditorDarkTheme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartMsOfficeOnFinish {
+            get {
+                return ((bool)(this["StartMsOfficeOnFinish"]));
+            }
+            set {
+                this["StartMsOfficeOnFinish"] = value;
             }
         }
     }

@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using System.Text.Json;
 using System.IO;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace UPPPDGenerator.Windows
 {
@@ -20,7 +21,8 @@ namespace UPPPDGenerator.Windows
     /// </summary>
     public partial class CreateWithoutTitleTemplateWin : Window
     {
-        private string TitlePath { get; set; } = string.Empty;
+        private TemplateJsonStructure TemplateJsonStructure { get; set; }
+        private TemplateAccessMode TemplateAccessMode { get; set; }
         private static readonly Dictionary<string, PageSettings> PresetPageSettings = new Dictionary<string, PageSettings>
         {
             { "Обычные", new PageSettings { Name = "Обычные", TopMargin = 2, BottomMargin = 2, LeftMargin = 3, RightMargin = 1.5 } },
@@ -30,29 +32,18 @@ namespace UPPPDGenerator.Windows
         };
         private string SelectedFilePath = string.Empty;
         private Settings SelectedFileSettings { get; set; } = new Settings();
-        public CreateWithoutTitleTemplateWin(string titlePath)
+        public CreateWithoutTitleTemplateWin(TemplateJsonStructure preparingTemplate, TemplateAccessMode templateAccessMode)
         {
             InitializeComponent();
-            TitlePath = titlePath;
+            TemplateJsonStructure = preparingTemplate;
+            TemplateAccessMode = templateAccessMode;
             LoadTextFieldSettings();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MainWin mainWin = new MainWin();
             mainWin.Show();
-
             Window.GetWindow(this).Close();
-        }
-
-        private void giveDescriptionsForimages_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void giveDescriptionsForimages_CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void useDefaultParameters_CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -107,35 +98,37 @@ namespace UPPPDGenerator.Windows
             FadeOut(tableHeadersColor, UIElement.OpacityProperty, 0.5);
             tableHeadersColor.Visibility = Visibility.Collapsed;
         }
-
-        private void Generate_Click(object sender, RoutedEventArgs e)
-        {
-            
+        private async void Generate_Click(object sender, RoutedEventArgs e)
+        {            
             // Собираем настройки
             var settings = new Settings
             {
                 PageSettings = GetPageSettings(),
-                TextFieldSettings = textFieldSettings,
+                TextFieldSettings = GetTextFieldSettings(),
                 ImageSettings = GetImageSettings(),
                 TableSettings = GetTableSettings()
             };
-            PreparingTemplate.Settings = settings;
-            // Передаем настройки в генератор шаблонов
-            TemplateGENERATOR.BeginWithoutTitle(TitlePath, settings);
-        }
+            TemplateJsonStructure.DocumentSettings = settings;
 
-        // 1️ Получаем настройки страницы
+            await TemplateGENERATOR.GenerateTemplate(TemplateJsonStructure, TemplateAccessMode);
+        }
+        private TextFieldSettings GetTextFieldSettings()
+        {
+            return textFieldSettings;
+        }
+        
+
         private PageSettings GetPageSettings()
         {
             if (listParamsChoise.SelectedItem is ComboBoxItem selectedItem)
             {
                 string selectedName = selectedItem.Content.ToString();
 
-                if (PresetPageSettings.ContainsKey(selectedName)) // Если выбрана предустановка
+                if (PresetPageSettings.ContainsKey(selectedName))
                 {
                     return PresetPageSettings[selectedName];
                 }
-                else // Если выбран "Другой"
+                else
                 {
                     return new PageSettings
                     {
@@ -152,14 +145,13 @@ namespace UPPPDGenerator.Windows
         private bool isUpdating = false;
         private void listParamsChoise_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //на инициализации окна всплывет ошибка, если это убрать
             if (listPaddingTop == null)
             {
                 return;
             }
             if (listParamsChoise.SelectedItem is ComboBoxItem selectedItem)
             {
-                isUpdating = true; // Отключаем проверку, чтобы избежать лишних переключений
+                isUpdating = true;
                 string selectedName = selectedItem.Content.ToString();
 
                 if (PresetPageSettings.ContainsKey(selectedName)) // Если выбрана предустановка
@@ -171,11 +163,15 @@ namespace UPPPDGenerator.Windows
                     listPaddingLeft.Text = preset.LeftMargin.ToString();
                     listPaddingRight.Text = preset.RightMargin.ToString();
                 }
-                isUpdating = false; // Включаем обратно проверку после обновления
+                isUpdating = false;
             }
         }
         private void CheckIfCustomMargins()
         {
+            if (listPaddingTop == null) return;
+            if (listPaddingBottom == null) return;
+            if (listPaddingLeft == null) return;
+            if (listPaddingRight == null) return;
             if (isUpdating) return; // Если идет обновление — просто выходим
             double.TryParse(listPaddingTop.Text, out double top);
             double.TryParse(listPaddingBottom.Text, out double bottom);
@@ -210,15 +206,15 @@ namespace UPPPDGenerator.Windows
         {
             string oldText = textBox.Text;
             StringBuilder newText = new StringBuilder();
-            bool hasDecimalPoint = false; // Флаг, есть ли уже "," или "."
+            bool hasDecimalPoint = false;
 
             foreach (char c in oldText)
             {
-                if (char.IsDigit(c)) // Если цифра – добавляем
+                if (char.IsDigit(c))
                 {
                     newText.Append(c);
                 }
-                else if ((c == '.' || c == ',') && !hasDecimalPoint) // Если первая "." или ","
+                else if ((c == '.' || c == ',') && !hasDecimalPoint)
                 {
                     newText.Append(',');
                     hasDecimalPoint = true;
@@ -242,30 +238,26 @@ namespace UPPPDGenerator.Windows
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
-                    textBox.Text = "0"; // Если поле пустое — ставим "0"
+                    textBox.Text = "0";
                     return;
                 }
 
-                // Исправляем случаи, когда ввод начинается с запятой
                 if (input.StartsWith(","))
                 {
                     input = "0" + input;
                 }
 
-                // Исправляем случаи, когда ввод заканчивается запятой
                 if (input.EndsWith(","))
                 {
                     input += "0";
                 }
 
-                // Исправляем случаи, если пользователь ввел только "," или "."
                 if (input == "," || input == ".")
                 {
                     textBox.Text = "0";
                     return;
                 }
 
-                // Убираем лидирующие нули перед запятой (например, "0000000," → "0,")
                 if (input.Contains(","))
                 {
                     int commaIndex = input.IndexOf(",");
@@ -273,11 +265,8 @@ namespace UPPPDGenerator.Windows
                 }
                 else
                 {
-                    // Если нет запятой, просто убираем лидирующие нули (например, "000000" → "0")
                     input = int.Parse(input).ToString();
                 }
-
-                // Оставляем только одну десятичную долю
                 
                 if (textBox.Name == "FirstLineIndentationTextBox" || textBox.Name == "tableText_FirstLineIndentationTextBox")
                 {
@@ -285,14 +274,14 @@ namespace UPPPDGenerator.Windows
                     {
                         if (double.TryParse(input, out double value))
                         {
-                            input = value.ToString("0.00"); // Округляем до двух знаков после запятой
+                            input = value.ToString("0.00");
                         }
                     }
                 }
                 else if (input.Contains(",") || input.Contains("."))
                 {
                     int commaIndex = input.IndexOf(",");
-                    if (commaIndex + 2 < input.Length) // Если после запятой больше одной цифры
+                    if (commaIndex + 2 < input.Length)
                     {
                         input = input.Substring(0, commaIndex + 2);
                     }
@@ -304,34 +293,28 @@ namespace UPPPDGenerator.Windows
 
         private void LoadTextFieldSettings()
         {
-            // Устанавливаем шрифт
             FontFamilyComboBox.SelectedItem = FontFamilyComboBox.Items
                 .Cast<ComboBoxItem>()
                 .FirstOrDefault(item => item.Content.ToString() == textFieldSettings.FontFamily);
 
-            // Устанавливаем размер шрифта
             FontSizeComboBox.SelectedItem = FontSizeComboBox.Items
                 .Cast<ComboBoxItem>()
                 .FirstOrDefault(item => item.Content.ToString() == textFieldSettings.FontSize.ToString());
 
-            // Выравнивание
             ParagraphAlignmentComboBox.SelectedItem = ParagraphAlignmentComboBox.Items
                 .Cast<ComboBoxItem>()
                 .FirstOrDefault(item => item.Content.ToString() == textFieldSettings.Alignment);
 
-            // Устанавливаем отступы
             MarginLeftTextBox.Text = textFieldSettings.MarginLeft.ToString();
             MarginRightTextBox.Text = textFieldSettings.MarginRight.ToString();
             MarginTopTextBox.Text = textFieldSettings.MarginTop.ToString();
             MarginBottomTextBox.Text = textFieldSettings.MarginBottom.ToString();
             FirstLineIndentationTextBox.Text = textFieldSettings.FirstLineIndentation.ToString();
 
-            // Межстрочный интервал
             LineSpacingComboBox.SelectedItem = LineSpacingComboBox.Items
                 .Cast<ComboBoxItem>()
                 .FirstOrDefault(item => item.Content.ToString() == textFieldSettings.LineSpacingType);
 
-            // Если выбран множитель, показываем поле
             if (textFieldSettings.LineSpacingType == "Множитель")
             {
                 LineSpacingMultiplierLabel.Visibility = Visibility.Visible;
@@ -388,6 +371,9 @@ namespace UPPPDGenerator.Windows
 
         private void LineSpacingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (LineSpacingComboBox == null) return;
+            if (LineSpacingMultiplierTextBox == null) return;
+
             if (LineSpacingComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
                 textFieldSettings.LineSpacingType = selectedItem.Content.ToString();
@@ -401,7 +387,7 @@ namespace UPPPDGenerator.Windows
                 {
                     LineSpacingMultiplierLabel.Visibility = Visibility.Collapsed;
                     LineSpacingMultiplierTextBox.Visibility = Visibility.Collapsed;
-                    textFieldSettings.LineSpacingMultiplier = 1; // Сбрасываем множитель, если не используется
+                    textFieldSettings.LineSpacingMultiplier = 1;
                 }
             }
         }
@@ -415,7 +401,6 @@ namespace UPPPDGenerator.Windows
         }
 
 
-        //// 3️ Получаем настройки изображений
         private ImageSettings GetImageSettings()
         {
             return new ImageSettings
@@ -426,7 +411,6 @@ namespace UPPPDGenerator.Windows
             };
         }
 
-        //// 4️ Получаем настройки таблиц
         private TableSettings GetTableSettings()
         {
             bool useDefaultParagraphSettings = useDefaultParameters_CheckBox.IsChecked ?? false;
@@ -440,7 +424,6 @@ namespace UPPPDGenerator.Windows
 
                 UseDefaultParagraphSettings = useDefaultParagraphSettings,
 
-                // Используем параметры абзаца, если установлен чекбокс
                 FontFamily = useDefaultParagraphSettings
             ? (FontFamilyComboBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Times New Roman"
             : (tableText_FontFamilyComboBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Times New Roman",
@@ -483,42 +466,12 @@ namespace UPPPDGenerator.Windows
 
                 VerticalAlignment = (tableText_VerticalAlignment.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Сверху"
             };
-            //return new TableSettings
-            //{
-            //    NumberColumns = (bool)(giveNumbersOfColsForTable_CheckBox.IsChecked ?? false),
-            //    NameTables = (bool)(giveNamesOfColsForTable_CheckBox.IsChecked ?? false),
-            //    ColorizeHeaders = (bool)(colorizeHeaders_CheckBox.IsChecked ?? false),
-            //    EnableNumbering = (bool)(numerizeTables_CheckBox.IsChecked ?? false),
-            //    HeaderColor = (tableHeadersColor.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Голубой",
-
-
-            //    UseDefaultParagraphSettings = (bool)(useDefaultParameters_CheckBox.IsChecked ?? false),
-
-            //    FontFamily = (tableText_FontFamilyComboBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Times New Roman",
-            //    FontSize = int.TryParse((tableText_FontSizeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString(), out int fontSize) ? fontSize : 12,
-
-            //    ParagraphAlignment = (tableText_ParagraphAlignmentComboBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "По левому краю",
-
-            //    MarginLeft = double.TryParse(tableText_MarginLeftTextBox.Text, out double marginLeft) ? marginLeft : 0.0,
-            //    MarginRight = double.TryParse(tableText_MarginRightTextBox.Text, out double marginRight) ? marginRight : 0.0,
-            //    MarginTop = double.TryParse(tableText_MarginTopTextBox.Text, out double marginTop) ? marginTop : 0.0,
-            //    MarginBottom = double.TryParse(tableText_MarginBottomTextBox.Text, out double marginBottom) ? marginBottom : 0.0,
-            //    FirstLineIndentation = double.TryParse(tableText_FirstLineIndentationTextBox.Text, out double firstLineIndentation) ? firstLineIndentation : 0.0,
-
-            //    LineSpacing = (tableText_LineSpacingComboBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Одинарный",
-            //    LineSpacingMultiplier = double.TryParse(tableText_LineSpacingMultiplierTextBox.Text, out double multiplier) ? multiplier : 1.0,
-
-            //    VerticalAlignment = (tableText_VerticalAlignment.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Сверху"
-            //};
         }
-
-
 
         public void ApplySettingsToUI(Settings settings)
         {
             if (settings == null) return;
 
-            // Заполняем поля PageSettings
             switch (settings.PageSettings.Name)
             {
                 case "Обычные": listParamsChoise.SelectedIndex = 0; break;
@@ -533,7 +486,6 @@ namespace UPPPDGenerator.Windows
             listPaddingLeft.Text = settings.PageSettings.LeftMargin.ToString("0.00");
             listPaddingRight.Text = settings.PageSettings.RightMargin.ToString("0.00");
 
-            // Заполняем поля TextFieldSettings
             switch (settings.TextFieldSettings.FontFamily)
             {
                 case "Times New Roman":
@@ -582,7 +534,6 @@ namespace UPPPDGenerator.Windows
                     break;
             }
 
-            // Заполняем поля ImageSettings
             EnableNumberingCheckBox.IsChecked = settings.ImageSettings.EnableNumbering;
             giveDescriptionsForimages_CheckBox.IsChecked = settings.ImageSettings.EnableDescriptions;
             switch (settings.ImageSettings.Alignment)
@@ -601,7 +552,6 @@ namespace UPPPDGenerator.Windows
                     break;
             }
 
-            // Заполняем поля TableSettings
             numerizeTables_CheckBox.IsChecked = settings.TableSettings.NumberColumns;
             giveNamesOfColsForTable_CheckBox.IsChecked = settings.TableSettings.NameTables;
             colorizeHeaders_CheckBox.IsChecked = settings.TableSettings.ColorizeHeaders;
@@ -658,7 +608,7 @@ namespace UPPPDGenerator.Windows
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Multiselect = false,
-                Filter = "Шаблоны документов (файлы json) (*.json)|*.json"
+                Filter = "Шаблоны документов (*.ugt)|*.ugt"
             };
 
             if (openFileDialog.ShowDialog() == true)
@@ -671,6 +621,16 @@ namespace UPPPDGenerator.Windows
                 choosenFile.Visibility = Visibility.Visible;
                 FadeIn(choosenFile, UIElement.OpacityProperty, 0.2);
             }
+        }
+        public static string LoadAndDecryptTemplate(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("Файл шаблона не найден!");
+
+            byte[] encryptedData = File.ReadAllBytes(filePath);
+            byte[] decryptedData = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.CurrentUser);
+
+            return Encoding.UTF8.GetString(decryptedData);
         }
 
         private async void Cancel_Button_Click(object sender, RoutedEventArgs e)
@@ -757,9 +717,8 @@ namespace UPPPDGenerator.Windows
                 }
                 else
                 {
-                    string jsonContent = File.ReadAllText(SelectedFilePath);
-                    var settingsInJson = JsonSerializer.Deserialize<OpenedJsonFile>(jsonContent);
-                    settings = settingsInJson.DocumentSettings;
+                    TemplateJsonStructure templateJsonStructure = new TemplateManager().DecryptData(SelectedFilePath);
+                    settings = templateJsonStructure.DocumentSettings;
                 }
 
 
@@ -835,23 +794,15 @@ namespace UPPPDGenerator.Windows
             FadeOut(preView, UIElement.OpacityProperty, 0.5);
             await Task.Delay(600);
             preView.Visibility = Visibility.Collapsed;
+            SelectedFileSettings = new Settings();
         }
-        public class OpenedJsonFile
-        {
-            public string TemplateName { get; set; }
-            public string TemplatePasswordHash { get; set; }
-            public string TemplateDescription {  get; set; }
-            public string CreatedAt { get; set; }
-            public int CreatedBy { get; set; }
-            public bool UseTitlePage { get; set; }
-            public string TitlePageXml { get; set; }
-            public Settings DocumentSettings { get; set; }
-        }
+        
 
         private void useGOSTSettings_Button_Click(object sender, RoutedEventArgs e)
         {
             preView.Visibility = Visibility.Visible;
             FadeIn(preView, UIElement.OpacityProperty, 0.5);
+            SelectedFilePath = string.Empty;
             SelectedFileSettings = GOSTSettings;
             LoadPreview();
         }

@@ -13,15 +13,17 @@
     <sys:String x:Key="errs/confirm/wrongcode">* Wrong code</sys:String>
     <sys:String x:Key="errs/auth/wrongauthdata">* Wrong email address or password!</sys:String>
     
-    <sys:String x:Key="mw/email">Email address:</sys:String>
-    <sys:String x:Key="mw/pass">Password:</sys:String>
+    <sys:String x:Key="mw/email">Email address</sys:String>
+    <sys:String x:Key="mw/pass">Password</sys:String>
 
     <sys:String x:Key="mw/reg/haveacc">Already have an account?</sys:String>
     <sys:String x:Key="mw/reg/nhaveacc">No account?</sys:String>
-    <sys:String x:Key="mw/reg/f">Last name:</sys:String>
-    <sys:String x:Key="mw/reg/i">First name:</sys:String>
-    <sys:String x:Key="mw/reg/o">Middle name (if any):</sys:String>
-    <sys:String x:Key="mw/reg/rpass">Repeat password:</sys:String>
+    <sys:String x:Key="mw/reg/f">Last name</sys:String>
+    <sys:String x:Key="mw/reg/i">First name</sys:String>
+    <sys:String x:Key="mw/reg/o">Middle name</sys:String>
+    
+    <sys:String x:Key="mw/reg/pass">Create password</sys:String>
+    <sys:String x:Key="mw/reg/rpass">Repeat password</sys:String>
     <sys:String x:Key="mw/reg/pass/containssmallletter">Contains a lowercase letter</sys:String>
     <sys:String x:Key="mw/reg/pass/containslargeletter">Contains an uppercase letter</sys:String>
     <sys:String x:Key="mw/reg/pass/containsspecsymbol">Contains a special character: !, №, #, $, % etc.</sys:String>
@@ -50,7 +52,7 @@
 
     <sys:String x:Key="m/1/title">Create a new template</sys:String>
     <sys:String x:Key="m/1/name">Give a name to the template:</sys:String>
-    <sys:String x:Key="m/1/useExternalTitle">Use a ready-made title page</sys:String>
+    <sys:String x:Key="m/1/useExternalTitle">Use a ready-made title page (try it first)</sys:String>
     <sys:String x:Key="m/1/makepass">Protect the template with a password</sys:String>
     <sys:String x:Key="m/1/writepass">Set the password for the template:</sys:String>
 

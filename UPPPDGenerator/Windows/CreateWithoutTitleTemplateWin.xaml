@@ -23,7 +23,7 @@
     </Window.Resources>
     <Grid>
         <Grid VerticalAlignment="Top" Background="#343434" Height="50">
-            <Image Source="{StaticResource icon}" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+            <Image Source="/resources/imgs/icon.png" Height="40" Width="40" Margin="10,0,0,0" HorizontalAlignment="Left"/>
             <TextBlock Text="Создать шаблон" FontSize="25" VerticalAlignment="Center" Margin="100,0,0,0" Foreground="White"/>
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,40,0">
                 <StackPanel.Resources>
@@ -165,13 +165,13 @@
                                 <ComboBoxItem Content="Другой" Tag="Custom"/>
                             </ComboBox>
                             <TextBlock Text="Верхнее" Foreground="LightGray" FontSize="14"/>
-                            <TextBox x:Name="listPaddingTop" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                            <TextBox x:Name="listPaddingTop" Text="0" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
                             <TextBlock Text="Нижнее" Foreground="LightGray" FontSize="14"/>
-                            <TextBox x:Name="listPaddingBottom" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                            <TextBox x:Name="listPaddingBottom" Text="0" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
                             <TextBlock Text="Левое" Foreground="LightGray" FontSize="14"/>
-                            <TextBox x:Name="listPaddingLeft" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                            <TextBox x:Name="listPaddingLeft" Text="0" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
                             <TextBlock Text="Правое" Foreground="LightGray" FontSize="14"/>
-                            <TextBox x:Name="listPaddingRight" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                            <TextBox x:Name="listPaddingRight" Text="0" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
                         </StackPanel>
                         
 
@@ -183,13 +183,13 @@
 
 
                             <TextBlock HorizontalAlignment="Left"  Text="Шрифт" Foreground="White" VerticalAlignment="Center"/>
-                            <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="FontFamilyComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left" x:Name="FontFamilyComboBox">
+                            <ComboBox SelectedIndex="1" Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="FontFamilyComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left" x:Name="FontFamilyComboBox">
                                 <ComboBoxItem Content="Times New Roman" Tag="Times New Roman"/>
                                 <ComboBoxItem Content="Arial" Tag="Arial"/>
                                 <ComboBoxItem Content="Calibri" Tag="Calibri"/>
                             </ComboBox>
                             <TextBlock HorizontalAlignment="Left"  Text="Размер шрифта (в пт)" Foreground="White"/>
-                            <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="FontSizeComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left"  x:Name="FontSizeComboBox">
+                            <ComboBox SelectedIndex="2" Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="FontSizeComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left"  x:Name="FontSizeComboBox">
                                 <ComboBoxItem Content="8"/>
                                 <ComboBoxItem Content="9"/>
                                 <ComboBoxItem Content="10"/>
@@ -209,29 +209,29 @@
                             </ComboBox>
                             <TextBlock HorizontalAlignment="Left"  Text="Выравнивание (в пределах страницы)" Foreground="White" VerticalAlignment="Center"/>
                             <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="ParagraphAlignmentComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left" 
-x:Name="ParagraphAlignmentComboBox" VerticalAlignment="Center">
+x:Name="ParagraphAlignmentComboBox" VerticalAlignment="Center" SelectedIndex="0">
                                 <ComboBoxItem Content="По левому краю"/>
                                 <ComboBoxItem Content="По правому краю"/>
                                 <ComboBoxItem Content="По центру"/>
                                 <ComboBoxItem Content="По ширине"/>
                             </ComboBox>
                             <TextBlock HorizontalAlignment="Left" Text="Отступ слева (в см)" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBox x:Name="MarginLeftTextBox" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
+                            <TextBox x:Name="MarginLeftTextBox" Text="0" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
 
                             <TextBlock HorizontalAlignment="Left" Text="Отступ справа (в см)" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBox x:Name="MarginRightTextBox" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
+                            <TextBox x:Name="MarginRightTextBox" Text="0" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
 
                             <TextBlock HorizontalAlignment="Left" Text="Отступ сверху (в см)" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBox x:Name="MarginTopTextBox" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
+                            <TextBox x:Name="MarginTopTextBox" Text="0" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
 
                             <TextBlock HorizontalAlignment="Left" Text="Отступ снизу (в см)" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBox x:Name="MarginBottomTextBox" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
+                            <TextBox x:Name="MarginBottomTextBox" Text="0" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
 
                             <TextBlock HorizontalAlignment="Left" Text="Отступ первой строки (в см)" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBox x:Name="FirstLineIndentationTextBox" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
+                            <TextBox x:Name="FirstLineIndentationTextBox" Text="0" LostFocus="TextBox_LostFocus" TextChanged="MarginTextBox_TextChanged"/>
 
                             <TextBlock HorizontalAlignment="Left" Margin="5" Text="Межстрочный интервал" Foreground="White" VerticalAlignment="Center"/>
-                            <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectionChanged="LineSpacingComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left"  x:Name="LineSpacingComboBox" Margin="5">
+                            <ComboBox Style="{StaticResource CustomComboBoxStyle}" SelectedIndex="1" SelectionChanged="LineSpacingComboBox_SelectionChanged" Width="500" HorizontalAlignment="Left"  x:Name="LineSpacingComboBox" Margin="5">
                                 <ComboBoxItem Content="Одинарный" Tag="1"/>
                                 <ComboBoxItem Content="Полуторный" Tag="1.5"/>
                                 <ComboBoxItem Content="Двойной" Tag="2"/>
@@ -239,7 +239,7 @@ x:Name="ParagraphAlignmentComboBox" VerticalAlignment="Center">
                             </ComboBox>
 
                             <TextBlock x:Name="LineSpacingMultiplierLabel" HorizontalAlignment="Left" Margin="5" Text="Множитель (в pt)" Foreground="White" VerticalAlignment="Center" Visibility="Collapsed"/>
-                            <TextBox x:Name="LineSpacingMultiplierTextBox" LostFocus="TextBox_LostFocus" TextChanged="LineSpacingMultiplierTextBox_TextChanged" Margin="5" Visibility="Collapsed"/>
+                            <TextBox x:Name="LineSpacingMultiplierTextBox" Text="12" LostFocus="TextBox_LostFocus" TextChanged="LineSpacingMultiplierTextBox_TextChanged" Margin="5" Visibility="Collapsed"/>
                         </StackPanel>
 
                         
@@ -257,7 +257,7 @@ x:Name="ParagraphAlignmentComboBox" VerticalAlignment="Center">
                             </CheckBox>
                             <CheckBox x:Name="giveDescriptionsForimages_CheckBox"
                                       Foreground="White" Background="#595959" Margin="0,20,0,10"
-                                      Checked="giveDescriptionsForimages_CheckBox_Checked" Unchecked="giveDescriptionsForimages_CheckBox_Unchecked">
+                                      >
                                 <CheckBox.ContentTemplate>
                                     <ItemContainerTemplate>
                                         <TextBlock LineHeight="20" Background="Transparent" FontSize="14" TextWrapping="Wrap" Margin="10,0,0,0" Padding="0" Text="Давать названия изображениям (к примеру, Рисунок 1 — Описание изображения)"/>
@@ -266,7 +266,7 @@ x:Name="ParagraphAlignmentComboBox" VerticalAlignment="Center">
                             </CheckBox>
                             <TextBlock HorizontalAlignment="Left"  Text="Выравнивание (в пределах страницы)" Foreground="White" VerticalAlignment="Center"/>
                             <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left" 
-x:Name="ImageAlignmentComboBox" VerticalAlignment="Center">
+x:Name="ImageAlignmentComboBox" VerticalAlignment="Center" SelectedIndex="0">
                                 <ComboBoxItem Content="По левому краю"/>
                                 <ComboBoxItem Content="По правому краю"/>
                                 <ComboBoxItem Content="По центру"/>
@@ -382,13 +382,13 @@ Foreground="White" Background="#595959" Margin="0,20,0,10" Checked="useDefaultPa
                             <!-- _____________ФОРМАТИРОВАНИЕ ТЕКСТА В ТАБЛИЦЕ -->
                             <StackPanel x:Name="textInsideTableParameters" Visibility="Collapsed" Opacity="1">
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left"  Text="Шрифт" VerticalAlignment="Center"/>
-                                <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left" x:Name="tableText_FontFamilyComboBox">
+                                <ComboBox SelectedIndex="2" Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left" x:Name="tableText_FontFamilyComboBox">
                                     <ComboBoxItem Content="Times New Roman" Tag="Times New Roman"/>
                                     <ComboBoxItem Content="Arial" Tag="Arial"/>
                                     <ComboBoxItem Content="Calibri" Tag="Calibri"/>
                                 </ComboBox>
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left"  Text="Размер шрифта (в пт)"/>
-                                <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left"  x:Name="tableText_FontSizeComboBox">
+                                <ComboBox SelectedIndex="2" Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left"  x:Name="tableText_FontSizeComboBox">
                                     <ComboBoxItem Content="8"/>
                                     <ComboBoxItem Content="9"/>
                                     <ComboBoxItem Content="10"/>
@@ -407,7 +407,7 @@ Foreground="White" Background="#595959" Margin="0,20,0,10" Checked="useDefaultPa
                                     <ComboBoxItem Content="72"/>
                                 </ComboBox>
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left"  Text="Выравнивание (в пределах страницы)" VerticalAlignment="Center"/>
-                                <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left" 
+                                <ComboBox SelectedIndex="0" Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left" 
 x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
                                     <ComboBoxItem Content="По левому краю"/>
                                     <ComboBoxItem Content="По правому краю"/>
@@ -415,22 +415,22 @@ x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
                                     <ComboBoxItem Content="По ширине"/>
                                 </ComboBox>
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left" Text="Отступ слева (в см)" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tableText_MarginLeftTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                                <TextBox Text="0" x:Name="tableText_MarginLeftTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
 
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left" Text="Отступ справа (в см)" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tableText_MarginRightTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                                <TextBox Text="0" x:Name="tableText_MarginRightTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
 
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left" Text="Отступ сверху (в см)" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tableText_MarginTopTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                                <TextBox Text="0" x:Name="tableText_MarginTopTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
 
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left" Text="Отступ снизу (в см)" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tableText_MarginBottomTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                                <TextBox Text="0" x:Name="tableText_MarginBottomTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
 
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left" Text="Отступ первой строки (в см)" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tableText_FirstLineIndentationTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
+                                <TextBox Text="0" x:Name="tableText_FirstLineIndentationTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
 
                                 <TextBlock FontSize="14" Foreground="LightGray" HorizontalAlignment="Left" Margin="5" Text="Межстрочный интервал" VerticalAlignment="Center"/>
-                                <ComboBox Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left"  x:Name="tableText_LineSpacingComboBox" Margin="5">
+                                <ComboBox SelectedIndex="0" Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left"  x:Name="tableText_LineSpacingComboBox" Margin="5">
                                     <ComboBoxItem Content="Одинарный" Tag="1"/>
                                     <ComboBoxItem Content="Полуторный" Tag="1.5"/>
                                     <ComboBoxItem Content="Двойной" Tag="2"/>
@@ -438,7 +438,7 @@ x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
                                 </ComboBox>
 
                                 <TextBlock FontSize="14" Foreground="LightGray" x:Name="tableText_LineSpacingMultiplierLabel" HorizontalAlignment="Left" Margin="5" Text="Множитель (в pt)" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                <TextBox x:Name="tableText_LineSpacingMultiplierTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus" Margin="5" Visibility="Collapsed"/>
+                                <TextBox Text="12" x:Name="tableText_LineSpacingMultiplierTextBox" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus" Margin="5" Visibility="Collapsed"/>
                             </StackPanel>
                             <TextBlock Text="Выравнивание текста по вертикали"/>
                             <ComboBox SelectedIndex="0" Style="{StaticResource CustomComboBoxStyle}" Width="500" HorizontalAlignment="Left"  x:Name="tableText_VerticalAlignment" Margin="5">
@@ -454,22 +454,8 @@ x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
                 <!-- предустановленные -->
                 <StackPanel Grid.Column="2" Margin="10">
                     <TextBlock Text="Готовые настройки" FontSize="18" FontWeight="Bold" FontStyle="Italic" Foreground="White"/>
-                    <TextBlock Text="Вы можете выбрать шаблон документа с уже готовыми настройками для дальнейшего заполнения. Выберите файл шаблона ниже." TextWrapping="Wrap" LineHeight="20" FontSize="14" Foreground="LightGray"/>
-                    <Grid>
-                        <StackPanel>
-                            <TextBlock Text="Выбрать шаблон из папки"/>
-                            <ComboBox IsEnabled="False" Margin="0,0,0,5" Style="{StaticResource CustomComboBoxStyle}" Width="300" HorizontalAlignment="Left" x:Name="ChooseTemplateComboBox">
-                                <ComboBoxItem Content="Шаблон1"/>
-                                <ComboBoxItem Content="Шаблон2"/>
-                                <ComboBoxItem Content="Шаблон3"/>
-                                <ComboBoxItem Content="Шаблон4"/>
-                                <ComboBoxItem Content="Шаблон5"/>
-                                <ComboBoxItem Content="Другой..."/>
-                            </ComboBox>
-                        </StackPanel>
-                        <Rectangle Fill="Black" Opacity="0.90"/>
-                        <TextBlock Text="В разработке" VerticalAlignment="Center" HorizontalAlignment="Center" FontStyle="Italic" Foreground="LightGray"/>
-                    </Grid>
+                    <TextBlock Text="Вы можете выбрать шаблон документа с уже готовыми настройками для дальнейшего заполнения." TextWrapping="Wrap" LineHeight="20" FontSize="14" Foreground="LightGray"/>
+                    
                     <StackPanel x:Name="chooseTemplateFile">
                         <TextBlock Text="Выбрать файл шаблона"/>
                         <Button Content="Выбрать..." x:Name="ChoiseFileForTemplate" Click="ChoiseFileForTemplate_Click" HorizontalAlignment="Left" Padding="5" Margin="10" Background="Transparent" Foreground="White" BorderBrush="#B2009A"/>
@@ -503,11 +489,11 @@ x:Name="tableText_ParagraphAlignmentComboBox" VerticalAlignment="Center">
             <Rectangle Fill="Black" Opacity="0.7"/>
             <Border VerticalAlignment="Center" Background="#343434" CornerRadius="10" HorizontalAlignment="Center" Height="600" Width="1000">
                 <Grid>
-                    
-                    <ScrollViewer Margin="0,0,0,50" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="30,30,10,10">
-                            <TextBlock TextAlignment="Center" Text="Предварительный просмотр изменений" Foreground="White" Margin="10" FontSize="18" />
-                            <TextBlock TextAlignment="Center" Text="Будут стерты предыдущие, и записаны следующие настройки:" Foreground="LightGray" Margin="10" FontSize="16"/>
+                    <TextBlock TextAlignment="Center" Text="Предварительный просмотр изменений" Foreground="White" Margin="0,30,0,0" FontSize="18" />
+                    <TextBlock TextAlignment="Center" Text="Будут стерты предыдущие, и записаны следующие настройки:" Foreground="LightGray" Margin="0,70,0,0" FontSize="16"/>
+
+                    <ScrollViewer Margin="0,90,0,50" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="30,20,10,10">
                             <Grid HorizontalAlignment="Center" MinWidth="500" Margin="0,10,0,0">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">

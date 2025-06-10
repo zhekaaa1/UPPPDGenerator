@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
+using System.Windows.Input;
 using UPPPDGenerator.Managers;
 using UPPPDGenerator.Windows;
+using UPPPDGenerator.Windows.Elements;
 
 namespace UPPPDGenerator
 {
@@ -17,6 +14,8 @@ namespace UPPPDGenerator
     /// </summary>
     public partial class MainWindow : Window
     {
+        public int AuthState = 0;
+        public User UserToConfirm = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -27,25 +26,9 @@ namespace UPPPDGenerator
             Button button = (Button)sender;
             string langCode = button.Tag as string;
             LangManager.SetLanguage(langCode);
-            UpdateErrsLang();
-        }
-        private void UpdateErrsLang()
-        {
-            if (err1.Opacity != 0)
-            {
-                if (err1.Text.Contains("Неправильный") || err1.Text.Contains("Wrong"))
-                    err1.Text = (string)Application.Current.Resources["errs/auth/wrongauthdata"];
-
-                if (err1.Text.Contains("Обязательное") || err1.Text.Contains("field"))
-                    err1.Text = (string)Application.Current.Resources["errs/reqfield"];
-            }
-            if (err2.Opacity != 0)
-            {
-                err2.Text = (string)Application.Current.Resources["errs/reqfield"];
-            }
         }
 
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
 
@@ -58,214 +41,252 @@ namespace UPPPDGenerator
             switch (to)
             {
                 case "tologin":
-                    _ = AnimationManager.FadeOutGrid(this, maingrid);
-                    _ = AnimationManager.FadeInGrid(this, authgrid);
+                    AuthState = 1;
+                    _ = AnimationManager.FadeOut(this, maingrid);
+                    _ = AnimationManager.FadeIn(this, authgrid);
+                    _ = AnimationManager.FadeIn(this, OnAuthorizeGrid);
                     break;
                 case "toreg":
-                    _ = AnimationManager.FadeOutGrid(this, maingrid);
-                    _ = AnimationManager.FadeInGrid(this, reggrid);
+                    AuthState = 2;
+                    _ = AnimationManager.FadeOut(this, maingrid);
+                    _ = AnimationManager.FadeIn(this, reggrid);
+                    _ = AnimationManager.FadeIn(this, OnRegisterGrid);
                     break;
                 case "haveacc":
-                    _ = AnimationManager.FadeOutGrid(this, reggrid);
-                    _ = AnimationManager.FadeInGrid(this, authgrid);
+                    AuthState = 1;
+                    _ = AnimationManager.FadeOut(this, reggrid);
+                    _ = AnimationManager.FadeOut(this, OnRegisterGrid);
+                    _ = AnimationManager.FadeIn(this, authgrid);
+                    _ = AnimationManager.FadeIn(this, OnAuthorizeGrid);
                     break;
                 case "nhaveacc":
-                    _ = AnimationManager.FadeOutGrid(this, authgrid);
-                    _ = AnimationManager.FadeInGrid(this, reggrid);
+                    AuthState = 2;
+                    _ = AnimationManager.FadeOut(this, authgrid);
+                    _ = AnimationManager.FadeOut(this, OnAuthorizeGrid);
+                    _ = AnimationManager.FadeIn(this, reggrid);
+                    _ = AnimationManager.FadeIn(this, OnRegisterGrid);
                     break;
                 case "toconf":
-                    _ = AnimationManager.FadeOutGrid(this, reggrid);
-                    _ = AnimationManager.FadeInGrid(this, confgrid);
+                    AuthState = 3;
+                    _ = AnimationManager.FadeOut(this, OnRegisterGrid);
+                    _ = AnimationManager.FadeOut(this, reggrid);
+                    _ = AnimationManager.FadeIn(this, confgrid);
                     break;
                 case "back1":
-                    _ = AnimationManager.FadeOutGrid(this, authgrid);
-                    _ = AnimationManager.FadeInGrid(this, maingrid);
+                    AuthState = 0;
+                    _ = AnimationManager.FadeOut(this, authgrid);
+                    _ = AnimationManager.FadeIn(this, maingrid);
                     break;
                 case "back2":
-                    _ = AnimationManager.FadeOutGrid(this, reggrid);
-                    _ = AnimationManager.FadeInGrid(this, maingrid);
+                    AuthState = 0;
+                    _ = AnimationManager.FadeOut(this, reggrid);
+                    _ = AnimationManager.FadeIn(this, maingrid);
                     break;
                 case "back3":
-                    _ = AnimationManager.FadeOutGrid(this, confgrid);
-                    _ = AnimationManager.FadeInGrid(this, reggrid);
+                    AuthState = 0;
+                    _ = AnimationManager.FadeOut(this, confgrid);
+                    _ = AnimationManager.FadeIn(this, reggrid);
+                    break;
+                case "asguest":
+                    ContinueAsGuest();
+                    break;
+                case "backtoreg":
+                    _ = AnimationManager.FadeOut(this, confgrid);
+                    _ = AnimationManager.FadeIn(this, OnRegisterGrid);
+                    _ = AnimationManager.FadeIn(this, reggrid);
                     break;
             }
         }
-        private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
+        private int ClickCount = 0;
+        private void ContinueAsGuest()
         {
-            PasswordManager passwordManager = new PasswordManager();
-            passwordManager.TogglePasswordVisibility(hidden, shown, passwordshown, passwordhidden, sender, e);
-        }
-
-
-        private async void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            var fadeOut = new DoubleAnimation
+            if (ClickCount == 0)
             {
-                From = 1,
-                To = 0,
-                Duration = TimeSpan.FromSeconds(0.5)
-            };
-            if (err1.Opacity != 0)
-            {
-                err1.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            }
-            if (err2.Opacity != 0)
-            {
-                err2.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            }
-            
-
-
-            PasswordManager passwordManager = new PasswordManager();
-            string mail = email.Text;
-            string pass = passwordManager.GetPassword(this);
-
-            bool passshown = hidden.Visibility == Visibility.Collapsed;
-
-
-            UserManager userManager = new UserManager();
-            User found = await userManager.Authorize(mail, pass);
-
-            //User found = allusers.FirstOrDefault(user => user.Email == mail && user.PasswordHash == pass);
-
-
-            if (found != null)
-            {
-                Properties.Settings.Default.userid = found.Id;
-                await userManager.SetLogonUser(found.Id);
-
-                AnimateBorder(email, Colors.Green); // Зеленая подсветка
-                if (passshown) AnimateBorder(passwordshown, Colors.Green); // Зеленая подсветка
-                else AnimateBorder(passwordhidden, Colors.Green);
-
-                await Task.Delay(1000); // Ждем 1 секунду
-
-                
-                MainWin mainWin = new MainWin();
-                mainWin.Show();
-
-                Window.GetWindow(this)?.Close();
+                ErrorContainer.Show("Вы уверены? Некоторые возможности до авторизации будут недоступны. Нажмите ещё раз, чтобы продолжить как гость.", ErrorType.Info);
+                ClickCount++;
             }
             else
             {
-                AnimateBorder(email, Colors.Red); // Красная подсветка
-                if (passshown) AnimateBorder(passwordshown, Colors.Red); // Зеленая подсветка
-                else AnimateBorder(passwordhidden, Colors.Red);
-                await Task.Delay(1000); // Ждем 1 секунду
-                ShowError(1);
+                ClickCount = 0;
+                new MainWin().Show();
+                Close();
             }
         }
-        // Функция анимации рамки TextBox
-        private void AnimateBorder(Control control, Color color)
+        /// <summary>
+        /// Обработчик события кнопки ВОЙТИ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            if (control is TextBox textBox)
+            if (PasswordField.GetPassword() == "" || string.IsNullOrEmpty(PasswordField.GetPassword()) || email.Text == "" || string.IsNullOrEmpty(email.Text))
             {
-                var animation = new ColorAnimation
+                ErrorContainer.Show("Заполните все поля!", ErrorType.Critical);
+                return;
+            }
+            string mail = email.Text;
+            string password = PasswordField.GetPassword();
+            UserManager userManager = new UserManager();
+            var found = await userManager.Authorize(mail, password);
+
+            if (found.Id <= 0)
+            {
+                string errorMessage = found.FullName;
+                ErrorType errorType = found.Id == 0 ? ErrorType.Critical : ErrorType.Warning;
+                ErrorContainer.Show(errorMessage, errorType);
+                return;
+            }
+            MainWin mainWin = new MainWin();
+            mainWin.Show();
+            Close();
+        }
+        /// <summary>
+        /// Обработчик события кнопки ЗАРЕГИСТРИРОВАТЬСЯ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            string name = rf.Text.Trim();
+            string surname = ri.Text.Trim();
+            string patronymic = ro.Text.Trim();
+            string email = remail.Text.Trim();
+            string password = rpass.GetRealPassword();
+            string confirmPassword = rretrypass.GetRealPassword();
+
+            if (ValidateRegistrationFields(name,surname,patronymic,email,password,confirmPassword))
+            {
+                string fullname = string.Join(" ", surname, name, patronymic);
+                UserManager userManager = new UserManager();
+                var user = await userManager.Register(fullname, email, rpass.GetPassword());
+                if (user.Id <= 0)
                 {
-                    From = ((SolidColorBrush)textBox.BorderBrush).Color,
-                    To = color,
-                    Duration = TimeSpan.FromSeconds(0.5),
-                    AutoReverse = true
-                };
-
-                textBox.BorderBrush = new SolidColorBrush(((SolidColorBrush)textBox.BorderBrush).Color);
-                textBox.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+                    ErrorContainer.Show(user.FullName, user.Id == 0? ErrorType.Critical : ErrorType.Warning);
+                    return;
+                }
+                AuthState = 3;
+                UserToConfirm = user;
+                GoTo("toconf");
             }
-            else if (control is PasswordBox passwordBox)
+        }
+        /// <summary>
+        /// Обработчик события нажатия кнопки ПОДТВЕРДИТЬ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            if (VerificationCodeField.Text.Length != 6)
             {
-                var animation = new ColorAnimation
+                ErrorContainer.Show("Код подтверждения должен быть ни длиннее, ни короче 6 символов. Повторите попытку.", ErrorType.Critical);
+                return;
+            }
+            UserManager userManager = new UserManager();
+            string code = VerificationCodeField.Text.Trim().ToLower();
+            VerifyResult result = await userManager.VerifyUser(UserToConfirm, code);
+            if (result.Success == false)
+            {
+                ErrorContainer.Show(result.Message, result.User.Id == 0 ? ErrorType.Critical : ErrorType.Info);
+                return;
+            }
+            else
+            {
+                AuthState = 0;
+                new MainWin().Show();
+                Close();
+            }
+        }
+        private bool ValidateRegistrationFields(params string[] strings)
+        {
+            if (string.IsNullOrWhiteSpace(strings[0]) ||
+                string.IsNullOrWhiteSpace(strings[1]) ||
+                string.IsNullOrWhiteSpace(strings[2]) ||
+                string.IsNullOrWhiteSpace(strings[3]) ||
+                string.IsNullOrWhiteSpace(strings[4]) ||
+                string.IsNullOrWhiteSpace(strings[5]))
+            {
+                ErrorContainer.Show("Заполните все поля.", ErrorType.Critical);
+                return false;
+            }
+            bool IsValidEmail(string email)
+            {
+                try
                 {
-                    From = ((SolidColorBrush)passwordBox.BorderBrush).Color,
-                    To = color,
-                    Duration = TimeSpan.FromSeconds(0.5),
-                    AutoReverse = true
-                };
-
-                passwordBox.BorderBrush = new SolidColorBrush(((SolidColorBrush)passwordBox.BorderBrush).Color);
-                passwordBox.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+                    var addr = new MailAddress(email);
+                    return addr.Address == email;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-        }
-
-        // Функция плавного появления ошибки
-        private void ShowError(int codeErr)
-        {
-            FieldValidatorManager fieldValidatorManager = new FieldValidatorManager();
-
-            bool passshown = hidden.Visibility == Visibility.Collapsed;
-            Control passwordfield = passshown ? (Control)passwordshown : (Control)passwordhidden;
-
-            List<Control> controls = new List<Control> { email, passwordfield };
-            List<(Control, int)> checkedfields = fieldValidatorManager.CheckFields(controls);
-
-            bool isAllValid = !checkedfields.Any(x => x.Item2 != 1);
-
-            if (!isAllValid) codeErr = 2; // Если есть пустые поля
-
-            AnimateError(codeErr, checkedfields);
-        }
-        private void AnimateError(int errCode, List<(Control, int)> checkedFields)
-        {
-            string localizedMessage = "";
-            var fadeIn = new DoubleAnimation
+            if (!IsValidEmail(strings[3]))
             {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromSeconds(0.5)
-            };
-            
-
-            switch (errCode)
-            {
-                case 1:
-                    localizedMessage = (string)Application.Current.Resources["errs/auth/wrongauthdata"];
-                    err1.Text = localizedMessage;
-                    err1.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-                    break;
-                case 2:
-                    localizedMessage = (string)Application.Current.Resources["errs/reqfield"];
-                    //err1.Text = localizedMessage;
-                    //err1.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-
-                    // Подсветка полей с ошибками
-                    foreach (var (control, state) in checkedFields)
-                    {
-                        if (state != 1) // Если поле пустое
-                        {
-                            if (control is TextBox textBox)
-                            {
-                                if (textBox.Name == "email")
-                                {
-                                    err1.Text = localizedMessage;
-                                    err1.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-                                    AnimateBorder(control, Colors.Red);
-                                }
-                                else
-                                {
-                                    err2.Text = localizedMessage;
-                                    err2.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-                                    AnimateBorder(control, Colors.Red);
-                                }
-                            }
-                            if (control is PasswordBox passwordBox)
-                            {
-                                err2.Text = localizedMessage;
-                                err2.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-                                AnimateBorder(control, Colors.Red);
-                            }
-                        }
-                    }
-                    break;
+                ErrorContainer.Show("Введите корректный email.", ErrorType.Critical);
+                return false;
             }
+            string ValidatePassword(string password)
+            {
+                if (string.IsNullOrWhiteSpace(password))
+                    return "Пароль не должен быть пустым.";
+
+                if (password.Length < 8)
+                    return "Пароль должен содержать минимум 8 символов.";
+
+                if (!Regex.IsMatch(password, "[A-Z]"))
+                    return "Пароль должен содержать хотя бы одну заглавную букву.";
+
+                if (!Regex.IsMatch(password, "[a-z]"))
+                    return "Пароль должен содержать хотя бы одну строчную букву.";
+
+                if (!Regex.IsMatch(password, "[0-9]"))
+                    return "Пароль должен содержать хотя бы одну цифру.";
+
+                if (!Regex.IsMatch(password, "[^a-zA-Z0-9]"))
+                    return "Пароль должен содержать хотя бы один спецсимвол.";
+
+                return null;
+            }
+
+            string passwordValidationError = ValidatePassword(strings[4]); // где strings[4] — пароль
+            if (passwordValidationError != null)
+            {
+                ErrorContainer.Show(passwordValidationError, ErrorType.Critical);
+                return false;
+            }
+            if (strings[4] != strings[5])
+            {
+                ErrorContainer.Show("Пароли не совпадают.", ErrorType.Critical);
+                return false;
+            }
+            return true;
         }
 
-        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            TextBlock textBlock = sender as TextBlock;
+            if (AuthState == 1)
+            {
+                _ = AnimationManager.FadeOut(this, authgrid);
+                _ = AnimationManager.FadeOut(this, OnAuthorizeGrid);
+            }
+            else if (AuthState == 2)
+            {
+                _ = AnimationManager.FadeOut(this, reggrid);
+                _ = AnimationManager.FadeOut(this, OnRegisterGrid);
+            }
+            else if (AuthState == 3)
+            {
+                _ = AnimationManager.FadeOut(this, confgrid);
+            }
+            else return;
+            AuthState = 0;
+            _ = AnimationManager.FadeIn(this, maingrid);
+        }
 
-            string to = textBlock.Tag as string;
-
-            GoTo(to);
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            UserToConfirm = null;
+            GoTo("backtoreg");
         }
     }
 }
