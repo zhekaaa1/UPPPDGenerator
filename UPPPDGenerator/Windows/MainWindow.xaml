@@ -133,7 +133,7 @@
     Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource Lexend}"/>
                             <TextBlock Text="{DynamicResource mw/greeting}" FontSize="18" FontFamily="{StaticResource Comfortaa}"
     Margin="0,10,0,20" HorizontalAlignment="Center" Foreground="White"/>
-                            <cl:FieldOnMainScr x:Name="email" FieldPlaceholder="Адрес электронной почты" Text="zhenya100505@gmail.com"/>
+                            <cl:FieldOnMainScr x:Name="email" FieldPlaceholder="Адрес электронной почты"/>
                             <cl:PasswordBoxOnMainScr x:Name="PasswordField" PasswordPlaceholder="Пароль"/>
                             <StackPanel>
                                 <Button Content="{DynamicResource mw/login}" Background="#B2009A"

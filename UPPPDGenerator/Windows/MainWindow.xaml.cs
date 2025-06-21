@@ -225,6 +225,13 @@ namespace UPPPDGenerator
                 ErrorContainer.Show("Введите корректный email.", ErrorType.Critical);
                 return false;
             }
+            bool PasswordNotContainsSpace(string password) => !password.Contains(" ");
+            
+            if (!PasswordNotContainsSpace(strings[4]))
+            {
+                ErrorContainer.Show("Исключите пробелы из пароля.",ErrorType.Critical);
+                return false;
+            }
             string ValidatePassword(string password)
             {
                 if (string.IsNullOrWhiteSpace(password))
@@ -248,7 +255,7 @@ namespace UPPPDGenerator
                 return null;
             }
 
-            string passwordValidationError = ValidatePassword(strings[4]); // где strings[4] — пароль
+            string passwordValidationError = ValidatePassword(strings[4]);
             if (passwordValidationError != null)
             {
                 ErrorContainer.Show(passwordValidationError, ErrorType.Critical);

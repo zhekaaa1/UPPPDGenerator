@@ -56,6 +56,31 @@ namespace UPPPDGenerator.Managers
                         }
                     }
                 }
+
+                var pageSettings = templateDecoded.DocumentSettings.PageSettings;
+
+                int top = (int)(pageSettings.TopMargin * 567);
+                int bottom = (int)(pageSettings.BottomMargin * 567);
+                int left = (int)(pageSettings.LeftMargin * 567);
+                int right = (int)(pageSettings.RightMargin * 567);
+
+                var sectionProps = body.GetFirstChild<SectionProperties>();
+                if (sectionProps == null)
+                {
+                    sectionProps = new SectionProperties();
+                    body.Append(sectionProps);
+                }
+
+                sectionProps.RemoveAllChildren<PageMargin>();
+
+                sectionProps.AppendChild(new PageMargin
+                {
+                    Top = new Int32Value(top),
+                    Bottom = new Int32Value(bottom),
+                    Left = (UInt32Value)(uint)left,
+                    Right = (UInt32Value)(uint)right,
+                });
+
                 doc.MainDocumentPart.Document.Save();
             }
             outputPathStr = outputPath;
@@ -67,9 +92,7 @@ namespace UPPPDGenerator.Managers
                 if (block is System.Windows.Documents.Paragraph wpfParagraph)
                 {
                     var paragraph = new Y.Paragraph();
-                    // Применяем свойства абзаца
                     var paragraphProperties = new Y.ParagraphProperties();
-                    // Применяем выравнивание
                     if (settings.Alignment == "По ширине")
                     {
                         paragraphProperties.Justification = new Y.Justification { Val = Y.JustificationValues.Both };
@@ -104,14 +127,12 @@ namespace UPPPDGenerator.Managers
                         };
                     }
                     paragraph.ParagraphProperties = paragraphProperties;
-                    // Обрабатываем все inline элементы (Run) в абзаце
                     foreach (var inline in wpfParagraph.Inlines)
                     {
                         if (inline is System.Windows.Documents.Run wpfRun)
                         {
                             var run = new Y.Run(new Y.Text(wpfRun.Text) { Space = SpaceProcessingModeValues.Preserve });
                             var runProps = new Y.RunProperties();
-                            // Применение форматирования
                             if (wpfRun.FontWeight == FontWeights.Bold)
                                 runProps.Bold = new Y.Bold();
                             if (wpfRun.FontStyle == FontStyles.Italic)
@@ -126,17 +147,15 @@ namespace UPPPDGenerator.Managers
                             paragraph.Append(run);
                         }
                     }
-                    // Добавляем собранный абзац в тело документа
                     body.Append(paragraph);
                 }
             }
         }
         private void InsertImage(Y.Body body, ImageResource imageResource, Settings allSettings,WordprocessingDocument doc)
         {
-            if (imageResource == null) return;  // если нет данных изображения
+            if (imageResource == null) return; 
             ImageSettings settings = allSettings.ImageSettings;
             var paragraph = new Y.Paragraph();
-            // Устанавливаем выравнивание
             var paragraphProperties = new Y.ParagraphProperties();
             if (settings.Alignment == "По центру")
             {
@@ -151,20 +170,15 @@ namespace UPPPDGenerator.Managers
                 paragraphProperties.Justification = new Y.Justification { Val = Y.JustificationValues.Left };
             }
             paragraph.Append(paragraphProperties);
-            // Путь к изображению
             string imagePath = imageResource.FilePath;
-            // Добавляем часть изображения (ImagePart) в документ
             var imagePart = doc.MainDocumentPart.AddImagePart(X.ImagePartType.Jpeg);
-            // Загрузка изображения в ImagePart
             using (var stream = File.OpenRead(imagePath))
             {
                 imagePart.FeedData(stream);
             }
             string relationshipId = doc.MainDocumentPart.GetIdOfPart(imagePart);
-            // Размер изображения
             long cx = 5500000;
             long cy = 3200000;
-            // Создаем элемент изображения в документе
             var element = new Y.Drawing(
         new Inline(
             new Extent { Cx = cx, Cy = cy },
@@ -195,7 +209,6 @@ namespace UPPPDGenerator.Managers
         });
             var run = new Y.Run(element);
             paragraph.Append(run);
-            // Если включена нумерация и описание, добавляем подпись
             if (settings.EnableNumbering || settings.EnableDescriptions)
             {
                 string captionText = string.Empty;
@@ -213,7 +226,6 @@ namespace UPPPDGenerator.Managers
                 var captionParagraph = new Y.Paragraph();
                 var tparagraphProperties = new Y.ParagraphProperties();
 
-                // Применяем выравнивание
                 if (settings.Alignment == "По ширине")
                 {
                     tparagraphProperties.Justification = new Y.Justification { Val = Y.JustificationValues.Both };
@@ -261,28 +273,12 @@ namespace UPPPDGenerator.Managers
 
                 captionParagraph.Append(captionRun);
 
-                // Добавляем подпись после изображения
-                body.Append(paragraph);  // Добавляем изображение
-                body.Append(captionParagraph); // Добавляем подпись
+                body.Append(paragraph);  
+                body.Append(captionParagraph);
             }
             else
             {
-                // Добавляем только изображение без подписи
                 body.Append(paragraph);
-            }
-        }
-        private bool IsFileOpen(string filePath)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-                {
-                    return false;
-                }
-            }
-            catch (IOException)
-            {
-                return true;
             }
         }
     }

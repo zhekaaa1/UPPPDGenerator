@@ -237,8 +237,6 @@ namespace UPPPDGenerator.Windows
                 await AnimationManager.FadeIn(this, selected);
             }
         }
-        private const int MaxFilenameLength = 219; // Максимальная длина имени файла в Windows
-        private const int MaxDescriptionLength = 499; // Максимальная длина описания
         private static readonly char[] InvalidChars = { '\\', '/', ':', '*', '"', '<', '>', '|' };
         
         private void ShowErrorMessage(string errorTextBlock)
@@ -299,7 +297,6 @@ namespace UPPPDGenerator.Windows
         {
             if (TemplatesListView.SelectedItem is TemplateViewModel viewModel)
             {
-                // Пример: показ MessageBox — можно заменить на отдельное окно
                 MessageBox.Show($"Шаблон: {viewModel.TemplateName}\n" +
                                 $"{viewModel.AuthorName}\n" +
                                 $"{viewModel.CreatedAtFormatted}\n\n" +

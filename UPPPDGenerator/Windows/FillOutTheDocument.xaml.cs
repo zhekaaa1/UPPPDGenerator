@@ -28,8 +28,8 @@ namespace UPPPDGenerator.Windows
         private TemplateJsonStructure LoadedTemplate;
 
         private string selectedImagePath;
-        private bool enableDescriptions = true; // Заглушка, пока не привязано к шаблону
-        private bool enableImageNumbering = true; // Заглушка, пока не привязано к шаблону
+        private bool enableDescriptions = true;
+        private bool enableImageNumbering = true;
         private ImageResource SelectedImageResource;
         private HorizontalAlignment MainEditorHorizontalAlignment = HorizontalAlignment.Left;
 
@@ -139,7 +139,7 @@ namespace UPPPDGenerator.Windows
             if (ImageResourceList.SelectedItem is ListBoxItem selectedItem && selectedItem.Tag is ImageResource image)
             {
                 ImageResourceList.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#343434"));
-                ImageResourceList.SelectionChanged -= ImageSelected; // Убираем обработчик
+                ImageResourceList.SelectionChanged -= ImageSelected;
 
                 InsertImageReference(image);
                 isSelectingForReference = false;
@@ -390,7 +390,6 @@ namespace UPPPDGenerator.Windows
             }
 
             ImageResourceList.SelectedItem = null;
-            // Закрываем окно редактирования
             await AnimationManager.FadeOut(this, addResourceDialogue);
         }
 
@@ -398,10 +397,8 @@ namespace UPPPDGenerator.Windows
         {
             if (SelectedImageResource == null) return;
 
-            // Удаляем ресурс из списка
             imageResources.Remove(SelectedImageResource);
 
-            // Удаляем из ListBox
             ListBoxItem itemToRemove = null;
             foreach (var item in ImageResourceList.Items)
             {
@@ -423,13 +420,10 @@ namespace UPPPDGenerator.Windows
                 imageResources[i].Id = i + 1;
             }
 
-            // Обновляем ListBox
             RefreshImageResourceList();
 
-            // Сбрасываем текущий выбранный ресурс
             SelectedImageResource = null;
 
-            // Закрываем окно редактирования
             await AnimationManager.FadeOut(this, addResourceDialogue);
         }
         private void RefreshImageResourceList()
@@ -509,12 +503,12 @@ namespace UPPPDGenerator.Windows
     }
     public class ImageResource
     {
-        public int Id { get; set; } // Порядковый номер
-        public string FilePath { get; set; } // Полный путь к файлу
-        public string FileName => System.IO.Path.GetFileName(FilePath); // Только название файла
-        public string Description { get; set; } // Описание изображения
-        public bool EnableNumbering { get; set; } // Включена ли нумерация
-        public bool EnableDescriptions { get; set; } // Включено ли описание
+        public int Id { get; set; } 
+        public string FilePath { get; set; } 
+        public string FileName => System.IO.Path.GetFileName(FilePath);
+        public string Description { get; set; }
+        public bool EnableNumbering { get; set; }
+        public bool EnableDescriptions { get; set; }
 
         public string DisplayName
         {

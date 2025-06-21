@@ -38,65 +38,29 @@ namespace UPPPDGenerator.Windows
             TemplateJsonStructure = preparingTemplate;
             TemplateAccessMode = templateAccessMode;
             LoadTextFieldSettings();
+            LineSpacingComboBox.SelectedIndex = 0;
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainWin mainWin = new MainWin();
-            mainWin.Show();
-            Window.GetWindow(this).Close();
+            new MainWin().Show();
+            Close();
         }
 
-        private void useDefaultParameters_CheckBox_Checked(object sender, RoutedEventArgs e)
+        private async void useDefaultParameters_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (textInsideTableParameters == null)
-            {
-                return;
-            }
-            FadeOut(textInsideTableParameters, UIElement.OpacityProperty, 0.5);
-            textInsideTableParameters.Visibility = Visibility.Collapsed;
+            await AnimationManager.FadeOut(this,textInsideTableParameters);
         }
-
-        private void useDefaultParameters_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private async void useDefaultParameters_CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (textInsideTableParameters == null)
-            {
-                return;
-            }
-            textInsideTableParameters.Visibility = Visibility.Visible;
-            FadeIn(textInsideTableParameters, UIElement.OpacityProperty, 0.5);
+            await AnimationManager.FadeIn(this, textInsideTableParameters);
         }
-        private void FadeIn(UIElement uIElement, DependencyProperty dependencyProperty, double seconds)
+        private async void colorizeHeaders_CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            DoubleAnimation fadeIn = new DoubleAnimation
-            {
-                To = 1,
-                Duration = TimeSpan.FromSeconds(seconds)
-            };
-            fadeIn.Completed += (s, e) => uIElement.Opacity = 1;
-            uIElement.BeginAnimation(dependencyProperty, fadeIn);
+            await AnimationManager.FadeIn(this,tableHeadersColor);
         }
-        private void FadeOut(UIElement uIElement, DependencyProperty dependencyProperty, double seconds)
+        private async void colorizeHeaders_CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            DoubleAnimation fadeOut = new DoubleAnimation
-            {
-                To = 0,
-                Duration = TimeSpan.FromSeconds(seconds)
-            };
-            uIElement.BeginAnimation(dependencyProperty, fadeOut);
-        }
-
-        private void colorizeHeaders_CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            if (tableHeadersColor == null) return;
-            tableHeadersColor.Visibility = Visibility.Visible;
-            FadeIn(tableHeadersColor, UIElement.OpacityProperty, 0.5);
-        }
-
-        private void colorizeHeaders_CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (tableHeadersColor == null) return;
-            FadeOut(tableHeadersColor, UIElement.OpacityProperty, 0.5);
-            tableHeadersColor.Visibility = Visibility.Collapsed;
+            await AnimationManager.FadeOut(this,tableHeadersColor);
         }
         private async void Generate_Click(object sender, RoutedEventArgs e)
         {            
@@ -112,12 +76,7 @@ namespace UPPPDGenerator.Windows
 
             await TemplateGENERATOR.GenerateTemplate(TemplateJsonStructure, TemplateAccessMode);
         }
-        private TextFieldSettings GetTextFieldSettings()
-        {
-            return textFieldSettings;
-        }
-        
-
+        private TextFieldSettings GetTextFieldSettings() => textFieldSettings;
         private PageSettings GetPageSettings()
         {
             if (listParamsChoise.SelectedItem is ComboBoxItem selectedItem)
@@ -154,7 +113,7 @@ namespace UPPPDGenerator.Windows
                 isUpdating = true;
                 string selectedName = selectedItem.Content.ToString();
 
-                if (PresetPageSettings.ContainsKey(selectedName)) // Если выбрана предустановка
+                if (PresetPageSettings.ContainsKey(selectedName))
                 {
                     PageSettings preset = PresetPageSettings[selectedName];
 
@@ -172,7 +131,7 @@ namespace UPPPDGenerator.Windows
             if (listPaddingBottom == null) return;
             if (listPaddingLeft == null) return;
             if (listPaddingRight == null) return;
-            if (isUpdating) return; // Если идет обновление — просто выходим
+            if (isUpdating) return;
             double.TryParse(listPaddingTop.Text, out double top);
             double.TryParse(listPaddingBottom.Text, out double bottom);
             double.TryParse(listPaddingLeft.Text, out double left);
@@ -187,7 +146,7 @@ namespace UPPPDGenerator.Windows
 
             if (!isPreset)
             {
-                listParamsChoise.SelectedIndex = listParamsChoise.Items.Count - 1; // "Другой"
+                listParamsChoise.SelectedIndex = listParamsChoise.Items.Count - 1;
             }
         }
 
@@ -221,75 +180,79 @@ namespace UPPPDGenerator.Windows
                 }
             }
 
-            // Проверяем, изменился ли текст, и обновляем, если нужно
             if (oldText != newText.ToString())
             {
-                int caretPosition = textBox.SelectionStart; // Запоминаем позицию курсора
+                int caretPosition = textBox.SelectionStart; 
                 textBox.Text = newText.ToString();
-                textBox.SelectionStart = Math.Min(caretPosition, textBox.Text.Length); // Восстанавливаем позицию
+                textBox.SelectionStart = Math.Min(caretPosition, textBox.Text.Length); 
             }
         }
 
+
+        public Dictionary<string, (double Min, double Max, string Description, bool UseDecimals)> FieldValidationRules = new Dictionary<string, (double Min, double Max, string Description, bool UseDecimals)>()
+        {
+            ["listPaddingTop"] = (0, 8, "отступа страницы (верхний)", true),
+            ["listPaddingBottom"] = (0, 8, "отступа страницы (нижний)", true),
+            ["listPaddingLeft"] = (0, 8, "отступа страницы (левый)", true),
+            ["listPaddingRight"] = (0, 8, "отступа страницы (правый)", true),
+
+            ["MarginLeftTextBox"] = (0, 8, "отступа абзаца (слева)", true),
+            ["MarginRightTextBox"] = (0, 8, "отступа абзаца (справа)", true),
+            ["MarginTopTextBox"] = (0, 8, "интервала до абзаца (сверху)", true),
+            ["MarginBottomTextBox"] = (0, 8, "интервала после абзаца (снизу)", true),
+            ["FirstLineIndentationTextBox"] = (0, 4, "отступа первой строки", true),
+            ["LineSpacingMultiplierTextBox"] = (0.5, 3, "межстрочного интервала", true),
+
+            ["tableText_MarginLeftTextBox"] = (0, 8, "отступа таблицы (слева)", true),
+            ["tableText_MarginRightTextBox"] = (0, 8, "отступа таблицы (справа)", true),
+            ["tableText_MarginTopTextBox"] = (0, 8, "интервала до строки таблицы (сверху)", true),
+            ["tableText_MarginBottomTextBox"] = (0, 8, "интервала после строки таблицы (снизу)", true),
+            ["tableText_FirstLineIndentationTextBox"] = (0, 4, "отступа первой строки в таблице", true),
+            ["tableText_LineSpacingMultiplierTextBox"] = (0.5, 3, "межстрочного интервала в таблице", true)
+        };
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (sender is TextBox textBox)
+            if (!(sender is TextBox textBox)) return;
+
+            string name = textBox.Name;
+            string input = textBox.Text.Trim().Replace('.', ',');
+
+            if (string.IsNullOrWhiteSpace(input) || input == "," || input == ".")
             {
-                string input = textBox.Text.Trim();
+                textBox.Text = "0";
+                return;
+            }
 
-                if (string.IsNullOrWhiteSpace(input))
-                {
-                    textBox.Text = "0";
-                    return;
-                }
+            if (input.StartsWith(",")) input = "0" + input;
+            if (input.EndsWith(",")) input += "0";
 
-                if (input.StartsWith(","))
-                {
-                    input = "0" + input;
-                }
+            if (!double.TryParse(input, out double value))
+            {
+                textBox.Text = "0";
+                return;
+            }
 
-                if (input.EndsWith(","))
+            if (FieldValidationRules.TryGetValue(name, out var rule))
+            {
+                if (value < rule.Min || value > rule.Max)
                 {
-                    input += "0";
-                }
-
-                if (input == "," || input == ".")
-                {
-                    textBox.Text = "0";
-                    return;
+                    ErrorContainer.Show($"Обнаружено аномальное значение для {rule.Description}. Допустимо: от {rule.Min} до {rule.Max}.",Elements.ErrorType.Warning);
+                    value = Clamp(value, rule.Min, rule.Max);
                 }
 
-                if (input.Contains(","))
-                {
-                    int commaIndex = input.IndexOf(",");
-                    input = int.Parse(input.Substring(0, commaIndex)).ToString() + input.Substring(commaIndex);
-                }
-                else
-                {
-                    input = int.Parse(input).ToString();
-                }
-                
-                if (textBox.Name == "FirstLineIndentationTextBox" || textBox.Name == "tableText_FirstLineIndentationTextBox")
-                {
-                    if (input.Contains(",")|| input.Contains("."))
-                    {
-                        if (double.TryParse(input, out double value))
-                        {
-                            input = value.ToString("0.00");
-                        }
-                    }
-                }
-                else if (input.Contains(",") || input.Contains("."))
-                {
-                    int commaIndex = input.IndexOf(",");
-                    if (commaIndex + 2 < input.Length)
-                    {
-                        input = input.Substring(0, commaIndex + 2);
-                    }
-                }
-                textBox.Text = input;
+                textBox.Text = rule.UseDecimals ? value.ToString("0.00") : ((int)value).ToString();
+            }
+            else
+            {
+                textBox.Text = value.ToString("0.00");
             }
         }
-
+        private static double Clamp(double value, double min, double max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
 
         private void LoadTextFieldSettings()
         {
@@ -410,7 +373,6 @@ namespace UPPPDGenerator.Windows
                 Alignment = (ImageAlignmentComboBox.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "По левому краю" // Выравнивание
             };
         }
-
         private TableSettings GetTableSettings()
         {
             bool useDefaultParagraphSettings = useDefaultParameters_CheckBox.IsChecked ?? false;
@@ -603,7 +565,7 @@ namespace UPPPDGenerator.Windows
             }
         }
 
-        private void ChoiseFileForTemplate_Click(object sender, RoutedEventArgs e)
+        private async void ChoiseFileForTemplate_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -613,47 +575,19 @@ namespace UPPPDGenerator.Windows
 
             if (openFileDialog.ShowDialog() == true)
             {
-                templateName.Text = System.IO.Path.GetFileName(openFileDialog.FileName);
+                templateName.Text = Path.GetFileName(openFileDialog.FileName);
                 SelectedFilePath = openFileDialog.FileName;
                 SelectedFileSettings = LoadPreview();
-                preView.Visibility = Visibility.Visible;
-                FadeIn(preView, UIElement.OpacityProperty, 0.5);
-                choosenFile.Visibility = Visibility.Visible;
-                FadeIn(choosenFile, UIElement.OpacityProperty, 0.2);
+                await AnimationManager.FadeIn(this,choosenFile);
+                await AnimationManager.FadeIn(this,preView);
             }
         }
-        public static string LoadAndDecryptTemplate(string filePath)
-        {
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException("Файл шаблона не найден!");
-
-            byte[] encryptedData = File.ReadAllBytes(filePath);
-            byte[] decryptedData = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.CurrentUser);
-
-            return Encoding.UTF8.GetString(decryptedData);
-        }
-
         private async void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
-            
             SelectedFilePath = string.Empty;
             SelectedFileSettings = new Settings();
-            var animation = new ColorAnimation
-            {
-                From = ((SolidColorBrush)Cancel_Button.BorderBrush).Color,
-                To = Colors.Red,
-                Duration = TimeSpan.FromSeconds(0.5),
-                AutoReverse = true
-            };
-
-            Cancel_Button.BorderBrush = new SolidColorBrush(((SolidColorBrush)Cancel_Button.BorderBrush).Color);
-            Cancel_Button.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-            await Task.Delay(1000); // Ждем 1 секунду
-            FadeOut(preView, UIElement.OpacityProperty, 0.5);
-            await Task.Delay(600);
-            preView.Visibility = Visibility.Collapsed;
-            choosenFile.Visibility = Visibility.Collapsed;
-            choosenFile.Opacity = 0;
+            await AnimationManager.FadeOut(this, preView);
+            await AnimationManager.FadeOut(this, choosenFile);
         }
         public Settings GOSTSettings = new Settings()
         {
@@ -720,8 +654,6 @@ namespace UPPPDGenerator.Windows
                     TemplateJsonStructure templateJsonStructure = new TemplateManager().DecryptData(SelectedFilePath);
                     settings = templateJsonStructure.DocumentSettings;
                 }
-
-
                 if (settings != null)
                 {
                     // Страница
@@ -779,32 +711,27 @@ namespace UPPPDGenerator.Windows
         private async void Apply_Button_Click(object sender, RoutedEventArgs e)
         {
             ApplySettingsToUI(SelectedFileSettings);
-            var animation = new ColorAnimation
-            {
-                From = ((SolidColorBrush)Apply_Button.BorderBrush).Color,
-                To = Colors.Green,
-                Duration = TimeSpan.FromSeconds(0.5),
-                AutoReverse = true
-            };
-
-            Apply_Button.BorderBrush = new SolidColorBrush(((SolidColorBrush)Apply_Button.BorderBrush).Color);
-            Apply_Button.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-            await Task.Delay(1000); // Ждем 1 секунду
-
-            FadeOut(preView, UIElement.OpacityProperty, 0.5);
-            await Task.Delay(600);
-            preView.Visibility = Visibility.Collapsed;
+            await AnimationManager.FadeOut(this, preView);
             SelectedFileSettings = new Settings();
         }
-        
-
-        private void useGOSTSettings_Button_Click(object sender, RoutedEventArgs e)
+        private async void useGOSTSettings_Button_Click(object sender, RoutedEventArgs e)
         {
-            preView.Visibility = Visibility.Visible;
-            FadeIn(preView, UIElement.OpacityProperty, 0.5);
+            await AnimationManager.FadeIn(this,preView);
             SelectedFilePath = string.Empty;
             SelectedFileSettings = GOSTSettings;
             LoadPreview();
+        }
+
+        private async void tableText_LineSpacingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tableText_LineSpacingComboBox.SelectedValue.ToString() == "Множитель")
+            {
+                await AnimationManager.FadeIn(this, tableText_LineSpacingSl);
+            }
+            else
+            {
+                await AnimationManager.FadeOut(this, tableText_LineSpacingSl);
+            }
         }
     }
 }
